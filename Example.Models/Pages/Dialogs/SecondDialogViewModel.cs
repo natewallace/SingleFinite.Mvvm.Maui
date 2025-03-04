@@ -19,27 +19,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace Example.App;
+using SingleFinite.Mvvm;
 
-public partial class MainPage : ContentPage
+namespace SingleFinite.Example.Models.Pages.Dialogs;
+
+public class SecondDialogViewModel : ViewModel, IClosable
 {
-    int count = 0;
+    public void Close() => _closedSource.RaiseEvent(this);
 
-    public MainPage()
-    {
-        InitializeComponent();
-    }
-
-    private void OnCounterClicked(object sender, EventArgs e)
-    {
-        count++;
-
-        if (count == 1)
-            CounterBtn.Text = $"Clicked {count} time";
-        else
-            CounterBtn.Text = $"Clicked {count} times";
-
-        SemanticScreenReader.Announce(CounterBtn.Text);
-    }
+    public Observable<IClosable> Closed => _closedSource.Observable;
+    private readonly ObservableSource<IClosable> _closedSource = new();
 }
-

@@ -19,10 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using SingleFinite.Example.Models;
+using SingleFinite.Mvvm;
+using SingleFinite.Mvvm.Maui;
+using SingleFinite.Mvvm.Maui.Services;
+using SingleFinite.Mvvm.Services;
+
 namespace Example.App;
 
 public partial class App : Application
 {
+    #region Fields
+
+    /// <summary>
+    /// Holds the app host.
+    /// </summary>
+    private IAppHost? _appHost = null;
+
+    #endregion
+
     public App()
     {
         InitializeComponent();
@@ -30,6 +45,12 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new AppShell());
+        _appHost ??= new AppHostBuilder()
+            .AddMaui<MainViewModel>()
+            .AddExampleViews()
+            .BuildAndStart();
+
+        return _appHost.ServiceProvider.GetRequiredService<IMainWindow>().Current ??
+            throw new InvalidOperationException("The main window isn't set.");
     }
 }

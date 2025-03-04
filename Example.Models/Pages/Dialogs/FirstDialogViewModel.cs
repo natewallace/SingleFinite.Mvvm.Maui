@@ -19,12 +19,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace Example.App;
+using SingleFinite.Mvvm;
+using SingleFinite.Mvvm.Services;
 
-public partial class AppShell : Shell
+namespace SingleFinite.Example.Models.Pages.Dialogs;
+
+public partial class FirstDialogViewModel(IDialogs dialogs) : ViewModel, IClosable
 {
-    public AppShell()
+    public void ShowSecondDialog()
     {
-        InitializeComponent();
+        dialogs.Show<SecondDialogViewModel>();
     }
+
+    public void Close() => _closedSource.RaiseEvent(this);
+
+    public Observable<IClosable> Closed => _closedSource.Observable;
+    private readonly ObservableSource<IClosable> _closedSource = new();
 }
