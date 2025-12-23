@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using SingleFinite.Essentials;
 using SingleFinite.Mvvm.Maui.Services;
 using SingleFinite.Mvvm.Services;
 
@@ -63,7 +64,7 @@ internal partial class MauiApp<TMainViewModel>(
         appHost.Closed
             .Observe()
             .OnEach(() => Application.Current?.CloseWindow(hostWindow))
-            .On(cancellationTokenProvider.CancellationToken);
+            .Until(cancellationTokenProvider.CancellationToken);
     }
 
     /// <inheritdoc/>

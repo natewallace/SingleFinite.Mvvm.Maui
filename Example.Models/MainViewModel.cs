@@ -20,6 +20,7 @@
 // SOFTWARE.
 
 using System;
+using SingleFinite.Essentials;
 using SingleFinite.Mvvm;
 using SingleFinite.Mvvm.Services;
 
@@ -75,7 +76,7 @@ public partial class MainViewModel(
                     args.Cancel = dialog.Result == MessageDialogViewModel.MessageResult.Cancel;
                 }
             )
-            .On(this);
+            .Until(this);
 
         // content.Set<NavigatorViewModel>();
     }
