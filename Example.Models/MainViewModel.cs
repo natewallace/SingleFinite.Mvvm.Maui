@@ -1,5 +1,5 @@
 ﻿// MIT License
-// Copyright (c) 2024 Single Finite
+// Copyright (c) 2026 Single Finite
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy 
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,11 +30,11 @@ namespace SingleFinite.Example.Models;
 /// The host view model.
 /// </summary>
 /// <param name="appHost">The app host.</param>
-/// <param name="dialogs">Dialog presenter.</param>
+/// <param name="dialog">Dialog presenter.</param>
 /// <param name="content">Content presenter.</param>
 public partial class MainViewModel(
     IAppHost appHost,
-    IDialogs dialogs,
+    IAppDialog dialog,
     IPresentableItem content
 ) : ViewModel
 {
@@ -43,7 +43,7 @@ public partial class MainViewModel(
     /// <summary>
     /// Dialog presenter.
     /// </summary>
-    public IDialogs Dialogs => dialogs;
+    public IAppDialog Dialog => dialog;
 
     /// <summary>
     /// Content presenter.
@@ -64,7 +64,7 @@ public partial class MainViewModel(
             .OnEach(
                 async args =>
                 {
-                    var dialog = await dialogs.ShowAsync<MessageDialogViewModel>(
+                    var dialog = await Dialog.ShowAsync<MessageDialogViewModel>(
                         new MessageDialogViewModel.Context(
                             Title: "Close App",
                             Message: "Do you want to close the app?",
@@ -78,7 +78,7 @@ public partial class MainViewModel(
             )
             .Until(this);
 
-        // content.Set<NavigatorViewModel>();
+        content.Set<NavigatorViewModel>();
     }
 
     #endregion

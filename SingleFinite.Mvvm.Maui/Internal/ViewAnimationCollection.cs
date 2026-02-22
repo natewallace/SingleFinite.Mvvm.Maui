@@ -19,49 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using SingleFinite.Mvvm.Maui.Services;
-using SingleFinite.Mvvm.Services;
-
-namespace SingleFinite.Mvvm.Maui.Internal.Services;
+namespace SingleFinite.Mvvm.Maui.Internal;
 
 /// <summary>
-/// Implementation of <see cref="IMainDispatcher"/> that uses the
-/// <see cref="Microsoft.Maui.Dispatching.Dispatcher"/> from the main window to
-/// execute functions.
+/// A collection of ViewAnimation instances that are run in parallel.
 /// </summary>
-/// <remarks>
-/// Constructor.
-/// </remarks>
-/// <param name="mainWindow">The main window for the app.</param>
-internal partial class DispatcherMain(IMainWindow mainWindow) : IMainDispatcher
+/// <param name="viewAnimations">
+/// The ViewAnimation instances that make up the collection.
+/// </param>
+internal class ViewAnimationCollection(
+    params IEnumerable<ViewAnimation> viewAnimations
+) : ViewAnimation
 {
     #region Methods
 
     /// <inheritdoc/>
-    public Task<TResult> RunAsync<TResult>(
-        Func<Task<TResult>> func,
-        CancellationToken cancellationToken = default
-    )
+    public override void Initialize(View view)
     {
-        var dispatcher = mainWindow.Current?.Dispatcher ??
-            throw new InvalidOperationException("Main window is null.");
+        foreach (var viewAnimation in viewAnimations)
+            viewAnimation.Initialize(view);
+    }
 
-        var taskCompletionSource = new TaskCompletionSource<TResult>();
+    /// <inheritdoc/>
+    public override async Task<bool> RunAsync(View view)
+    {
+        var tasks = viewAnimations.Select(
+            viewAnimation => viewAnimation.RunAsync(view)
+        ).ToList();
 
-        dispatcher.DispatchAsync(async () =>
-        {
-            try
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                taskCompletionSource.SetResult(await func());
-            }
-            catch (Exception ex)
-            {
-                taskCompletionSource.SetException(ex);
-            }
-        });
+        await Task.WhenAll(tasks);
 
-        return taskCompletionSource.Task;
+        return tasks.All(task => task.Result);
     }
 
     #endregion

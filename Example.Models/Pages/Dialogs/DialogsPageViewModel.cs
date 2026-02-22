@@ -4,11 +4,16 @@ using SingleFinite.Mvvm.Services;
 namespace SingleFinite.Example.Models.Pages.Dialogs;
 
 public partial class DialogsPageViewModel(
-    IDialogs dialogs
+    IAppDialog dialog
 ) : ViewModel
 {
     public void ShowFirstDialog()
     {
-        dialogs.Show<FirstDialogViewModel>();
+        dialog.Show<FirstDialogViewModel>();
+    }
+
+    public void CloseDialog()
+    {
+        dialog.Close(this);
     }
 }

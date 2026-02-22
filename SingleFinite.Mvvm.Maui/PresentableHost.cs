@@ -1,0 +1,168 @@
+﻿// MIT License
+// Copyright (c) 2026 Single Finite
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights 
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+// copies of the Software, and to permit persons to whom the Software is 
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in 
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+using SingleFinite.Essentials;
+using SingleFinite.Mvvm.Services;
+
+namespace SingleFinite.Mvvm.Maui;
+
+/// <summary>
+/// Presents views in a simple control.
+/// </summary>
+public partial class PresentableHost : TemplatedView
+{
+    #region Fields
+
+    /// <summary>
+    /// Observer for view changes on the source presentable.
+    /// </summary>
+    private IDisposable? _sourceViewObserver;
+
+    /// <summary>
+    /// Used to animate transitions between views.
+    /// </summary>
+    private readonly AnimatedContentPresenter _animatedContentPresenter = new();
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public PresentableHost()
+    {
+        Loaded += (_, _) => Subscribe();
+        Unloaded += (_, _) => Unsubscribe();
+    }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// The presentable whose views will be displayed in this control.
+    /// </summary>
+    public IPresentable? Source
+    {
+        get;
+        set
+        {
+            if (field == value)
+                return;
+
+            Unsubscribe();
+
+            field = value;
+
+            Subscribe();
+        }
+    }
+
+    /// <summary>
+    /// The animation to run when a view enters the control going forward.
+    /// </summary>
+    public ViewAnimation EnterForwardTransition { get; set; } =
+        ViewAnimation.FadeIn();
+
+    /// <summary>
+    /// The animation to run when a view enters the control going backward.
+    /// </summary>
+    public ViewAnimation EnterBackwardTransition { get; set; } =
+        ViewAnimation.FadeIn();
+
+    /// <summary>
+    /// The animation to run when a view exits the control going forward.
+    /// </summary>
+    public ViewAnimation ExitForwardTransition { get; set; } =
+        ViewAnimation.FadeOut();
+
+    /// <summary>
+    /// The animation to run when a view exits the control going backward.
+    /// </summary>
+    public ViewAnimation ExitBackwardTransition { get; set; } =
+        ViewAnimation.FadeOut();
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Get the content presenter from the control template.
+    /// </summary>
+    protected override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        var contentPresenter = GetTemplateChild("ContentPresenter")
+            as ContentPresenter;
+        contentPresenter?.Content = _animatedContentPresenter;
+    }
+
+    /// <summary>
+    /// Observe changes to the current view of the presentable.
+    /// </summary>
+    private void Subscribe()
+    {
+        if (_sourceViewObserver is not null)
+            return;
+
+        _sourceViewObserver = Source?.CurrentChanged
+            ?.Observe()
+            ?.OnEach(
+                args => UpdateSourceContent(
+                    view: args.View,
+                    isNew: args.IsNew
+                )
+            );
+
+        UpdateSourceContent(
+            view: Source?.Current,
+            isNew: true
+        );
+    }
+
+    /// <summary>
+    /// Stop observing changes to the current view of the presentable.
+    /// </summary>
+    private void Unsubscribe()
+    {
+        _sourceViewObserver?.Dispose();
+        _sourceViewObserver = null;
+    }
+
+    /// <summary>
+    /// Update the view that is being displayed.
+    /// </summary>
+    /// <param name="view">The view to display.</param>
+    /// <param name="isNew">Indicates if the view was newly added.</param>
+    private void UpdateSourceContent(IView? view, bool isNew)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+            await _animatedContentPresenter.SetContentAsync(
+                view: view as View,
+                enterTransition: isNew ? EnterForwardTransition : EnterBackwardTransition,
+                exitTransition: isNew ? ExitForwardTransition : ExitBackwardTransition
+            )
+        );
+    }
+
+    #endregion
+}

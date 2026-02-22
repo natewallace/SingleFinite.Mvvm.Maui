@@ -38,7 +38,7 @@ public static class AppHostBuilderExtensions
                         {
                             return serviceProvider.GetRequiredService<MainWindow>();
                         })
-                        .AddSingleton<IApplicationMainDispatcher, DispatcherMain>()
+                        .AddSingleton<IMainDispatcher, DispatcherMain>()
                         .AddSingleton<IMauiApp, MauiApp<TMainViewModel>>();
                 }
             )

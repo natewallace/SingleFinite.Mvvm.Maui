@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="using:SingleFinite.Mvvm.Maui"
+             x:Class="SingleFinite.Mvvm.Maui.Resources.Themes">
+
+
+    <Style TargetType="local:AnimatedContentPresenter">
+        <Setter Property="ControlTemplate">
+            <ControlTemplate>
+                <ContentPresenter
+                    x:Name="ContentPresenter"
+                    Background="{TemplateBinding Background}"
+                    BackgroundColor="{TemplateBinding BackgroundColor}"
+                    VerticalOptions="{TemplateBinding VerticalOptions}"
+                    HorizontalOptions="{TemplateBinding HorizontalOptions}"
+                    HeightRequest="{TemplateBinding HeightRequest}"
+                    WidthRequest="{TemplateBinding WidthRequest}"
+                    MinimumHeightRequest="{TemplateBinding MinimumHeightRequest}"
+                    MaximumHeightRequest="{TemplateBinding MaximumHeightRequest}"
+                    MinimumWidthRequest="{TemplateBinding MinimumWidthRequest}"
+                    MaximumWidthRequest="{TemplateBinding MaximumWidthRequest}"
+                    Margin="{TemplateBinding Margin}"
+                    Padding="{TemplateBinding Padding}"
+                    />
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="local:PresentableHost">
+        <Setter Property="IsClippedToBounds" Value="True" />
+        <Setter Property="ControlTemplate">
+            <ControlTemplate>
+                <ContentPresenter
+                    x:Name="ContentPresenter"
+                    Background="{TemplateBinding Background}"
+                    BackgroundColor="{TemplateBinding BackgroundColor}"
+                    VerticalOptions="{TemplateBinding VerticalOptions}"
+                    HorizontalOptions="{TemplateBinding HorizontalOptions}"
+                    HeightRequest="{TemplateBinding HeightRequest}"
+                    WidthRequest="{TemplateBinding WidthRequest}"
+                    MinimumHeightRequest="{TemplateBinding MinimumHeightRequest}"
+                    MaximumHeightRequest="{TemplateBinding MaximumHeightRequest}"
+                    MinimumWidthRequest="{TemplateBinding MinimumWidthRequest}"
+                    MaximumWidthRequest="{TemplateBinding MaximumWidthRequest}"
+                    Margin="{TemplateBinding Margin}"
+                    Padding="{TemplateBinding Padding}"
+                    IsClippedToBounds="{TemplateBinding IsClippedToBounds}"
+                    />
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:PresentableDialogHost">
+        <Setter Property="ScrimBackgroundColor" Value="#84888480" />
+        <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=#1f1f1f}" />
+        <Setter Property="DialogShape" Value="RoundRectangle 4" />
+        <Setter Property="DialogShadow" Value="4 4 16 Black 0.5" />
+        <Setter Property="ControlTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid x:Name="Root" IsVisible="False">
+                        <Rectangle
+                            x:Name="Scrim"
+                            BackgroundColor="{TemplateBinding ScrimBackgroundColor}"
+                            />
+                        <local:AnimatedContentPresenter
+                            x:Name="ContentPresenter"
+                            />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:Dialog">
+        <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=#1f1f1f}" />
+        <Setter Property="DialogShape" Value="RoundRectangle 4" />
+        <Setter Property="DialogShadow" Value="4 4 16 Black 0.5" />
+        <Setter Property="ControlTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Border
+                            x:Name="DialogBorder"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            BackgroundColor="{TemplateBinding DialogBackgroundColor}"
+                            StrokeShape="{TemplateBinding DialogShape}"
+                            Shadow="{TemplateBinding DialogShadow}">
+                            <ContentPresenter Content="{TemplateBinding DialogContent}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

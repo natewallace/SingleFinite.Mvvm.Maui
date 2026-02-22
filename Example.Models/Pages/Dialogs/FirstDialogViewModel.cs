@@ -1,5 +1,5 @@
 ﻿// MIT License
-// Copyright (c) 2024 Single Finite
+// Copyright (c) 2026 Single Finite
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy 
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,11 @@ using SingleFinite.Mvvm.Services;
 
 namespace SingleFinite.Example.Models.Pages.Dialogs;
 
-public partial class FirstDialogViewModel(IDialogs dialogs) : ViewModel, IClosable
+public partial class FirstDialogViewModel(IAppDialog dialog) : ViewModel, IClosable
 {
     public void ShowSecondDialog()
     {
-        dialogs.Show<SecondDialogViewModel>();
+        dialog.Show<SecondDialogViewModel>();
     }
 
     public void Close() => _closedSource.Emit(this);

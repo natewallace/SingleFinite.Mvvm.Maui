@@ -1,5 +1,6 @@
 ﻿using SingleFinite.Example.Models;
 using SingleFinite.Mvvm;
+using SingleFinite.Mvvm.Maui;
 
 namespace Example.App.Views;
 
@@ -11,13 +12,17 @@ public partial class MainWindow : Window, IView<MainViewModel>
 
         Page = new ContentPage()
         {
-            Content = new VerticalStackLayout
+            Content = new Grid
             {
-                Children = {
-                    new Label {
-                        HorizontalOptions = LayoutOptions.Start,
-                        VerticalOptions = LayoutOptions.Center,
-                        Text = "Welcome to .NET MAUI!"
+                Children =
+                {
+                    new PresentableHost()
+                    {
+                        Source = ViewModel.Content
+                    },
+                    new PresentableDialogHost()
+                    {
+                        Source = ViewModel.Dialog
                     }
                 }
             }

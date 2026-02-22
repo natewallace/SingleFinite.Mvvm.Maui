@@ -19,38 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using SingleFinite.Example.Models;
-using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Maui;
-using SingleFinite.Mvvm.Maui.Services;
-using SingleFinite.Mvvm.Services;
+namespace SingleFinite.Mvvm.Maui.Internal;
 
-namespace Example.App;
-
-public partial class App : Application
+/// <summary>A custom animation to apply to a View.</summary>
+/// <param name="runAsync">The function called by the RunAsync method.</param>
+/// <param name="initialize">
+/// The optional action called by the Initialize method.
+/// </param>
+internal class ViewAnimationCustom(
+    Func<View, Task<bool>> runAsync,
+    Action<View>? initialize = null
+) : ViewAnimation
 {
-    #region Fields
+    #region Methods
 
-    /// <summary>
-    /// Holds the app host.
-    /// </summary>
-    private IAppHost? _appHost = null;
+    /// <inheritdoc/>
+    public override void Initialize(View view) => initialize?.Invoke(view);
+
+    /// <inheritdoc/>
+    public override Task<bool> RunAsync(View view) => runAsync(view);
 
     #endregion
-
-    public App()
-    {
-        InitializeComponent();
-    }
-
-    protected override Window CreateWindow(IActivationState? activationState)
-    {
-        _appHost ??= new AppHostBuilder()
-            .AddMaui<MainViewModel>()
-            .AddExampleViews()
-            .BuildAndStart();
-
-        return _appHost.ServiceProvider.GetRequiredService<IMainWindow>().Current ??
-            throw new InvalidOperationException("The main window isn't set.");
-    }
 }

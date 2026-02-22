@@ -58,7 +58,12 @@ internal partial class MauiApp<TMainViewModel>(
         AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
         {
             if (e.ExceptionObject is Exception ex)
-                exceptionHandler.Handle(ex);
+            {
+                exceptionHandler.Handle(
+                    exception: ex,
+                    sourceArgs: sender
+                );
+            }
         };
 
         appHost.Closed
