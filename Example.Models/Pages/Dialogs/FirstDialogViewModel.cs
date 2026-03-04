@@ -25,7 +25,9 @@ using SingleFinite.Mvvm.Services;
 
 namespace SingleFinite.Example.Models.Pages.Dialogs;
 
-public partial class FirstDialogViewModel(IAppDialog dialog) : ViewModel, IClosable
+public partial class FirstDialogViewModel(IAppDialog dialog) :
+    ViewModel,
+    ICloseObservable
 {
     public void ShowSecondDialog()
     {
@@ -34,6 +36,6 @@ public partial class FirstDialogViewModel(IAppDialog dialog) : ViewModel, IClosa
 
     public void Close() => _closedSource.Emit(this);
 
-    public Observable<IClosable> Closed => _closedSource.Observable;
-    private readonly ObservableSource<IClosable> _closedSource = new();
+    public IEventObservable<ICloseObservable> Closed => _closedSource.Observable;
+    private readonly EventObservableSource<ICloseObservable> _closedSource = new();
 }

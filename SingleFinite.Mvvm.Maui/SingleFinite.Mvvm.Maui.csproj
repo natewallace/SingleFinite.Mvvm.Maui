@@ -48,7 +48,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.41" />
-		<PackageReference Include="SingleFinite.Mvvm" Version="0.0.32" />
+		<PackageReference Include="SingleFinite.Mvvm" Version="0.0.34" />
 	</ItemGroup>
 
 	<ItemGroup>

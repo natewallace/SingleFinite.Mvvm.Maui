@@ -28,7 +28,7 @@ public partial class MessageDialogViewModel(
     MessageDialogViewModel.Context? context = null
 ) :
     ViewModel,
-    IClosable
+    ICloseObservable
 {
     public MessageResult Result { get; private set; } = MessageResult.Cancel;
 
@@ -82,8 +82,8 @@ public partial class MessageDialogViewModel(
 
     private void Close() => _closedSource.Emit(this);
 
-    public Observable<IClosable> Closed => _closedSource.Observable;
-    private readonly ObservableSource<IClosable> _closedSource = new();
+    public IEventObservable<ICloseObservable> Closed => _closedSource.Observable;
+    private readonly EventObservableSource<ICloseObservable> _closedSource = new();
 
     public record class Context(
         string Title = "",

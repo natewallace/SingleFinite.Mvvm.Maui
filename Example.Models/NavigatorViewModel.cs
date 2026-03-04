@@ -45,7 +45,7 @@ public partial class NavigatorViewModel(
 
     public IPresentableItem PresentableItem => presentableItem;
 
-    protected override void OnInitialize()
+    protected override void OnCreated()
     {
         //SelectedPage = NavigatorPages.Home;
     }

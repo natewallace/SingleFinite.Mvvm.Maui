@@ -19,8 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using SingleFinite.Essentials;
 using SingleFinite.Mvvm;
 using SingleFinite.Mvvm.Services;
 
@@ -29,11 +27,9 @@ namespace SingleFinite.Example.Models;
 /// <summary>
 /// The host view model.
 /// </summary>
-/// <param name="appHost">The app host.</param>
 /// <param name="dialog">Dialog presenter.</param>
 /// <param name="content">Content presenter.</param>
 public partial class MainViewModel(
-    IAppHost appHost,
     IAppDialog dialog,
     IPresentableItem content
 ) : ViewModel
@@ -57,27 +53,8 @@ public partial class MainViewModel(
     /// <summary>
     /// Initialize observers and presentables.
     /// </summary>
-    protected override void OnInitialize()
+    protected override void OnCreated()
     {
-        appHost.Closing
-            .Observe()
-            .OnEach(
-                async args =>
-                {
-                    var dialog = await Dialog.ShowAsync<MessageDialogViewModel>(
-                        new MessageDialogViewModel.Context(
-                            Title: "Close App",
-                            Message: "Do you want to close the app?",
-                            PrimaryText: "Yes",
-                            CancelText: "No"
-                        )
-                    );
-
-                    args.Cancel = dialog.Result == MessageDialogViewModel.MessageResult.Cancel;
-                }
-            )
-            .Until(this);
-
         content.Set<NavigatorViewModel>();
     }
 

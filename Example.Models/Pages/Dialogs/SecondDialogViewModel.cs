@@ -24,10 +24,10 @@ using SingleFinite.Mvvm;
 
 namespace SingleFinite.Example.Models.Pages.Dialogs;
 
-public class SecondDialogViewModel : ViewModel, IClosable
+public class SecondDialogViewModel : ViewModel, ICloseObservable
 {
     public void Close() => _closedSource.Emit(this);
 
-    public Observable<IClosable> Closed => _closedSource.Observable;
-    private readonly ObservableSource<IClosable> _closedSource = new();
+    public IEventObservable<ICloseObservable> Closed => _closedSource.Observable;
+    private readonly EventObservableSource<ICloseObservable> _closedSource = new();
 }

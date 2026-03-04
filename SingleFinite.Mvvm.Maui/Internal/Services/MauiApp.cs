@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using SingleFinite.Essentials;
-using SingleFinite.Mvvm.Maui.Services;
+﻿using SingleFinite.Mvvm.Maui.Services;
 using SingleFinite.Mvvm.Services;
 
 namespace SingleFinite.Mvvm.Maui.Internal.Services;
@@ -8,22 +6,16 @@ namespace SingleFinite.Mvvm.Maui.Internal.Services;
 /// <summary>
 /// Implementation of <see cref="IMauiApp"/>.
 /// </summary>
-/// <param name="appHost">Listen for closed event.</param>
 /// <param name="mainWindow">Hold the main window for the app.</param>
 /// <param name="viewBuilder">Used to build HostWindow view.</param>
 /// <param name="exceptionHandler">Used to log unhandled exceptions.</param>
-/// <param name="cancellationTokenProvider">
-/// Used to unsubscribe observers.
-/// </param>
 /// <typeparam name="TMainViewModel">
 /// The type of view model to build for the HostWindow.
 /// </typeparam>
 internal partial class MauiApp<TMainViewModel>(
-    IAppHost appHost,
     IMainWindowProvider mainWindow,
     IViewBuilder viewBuilder,
-    IExceptionHandler exceptionHandler,
-    ICancellationTokenProvider cancellationTokenProvider
+    IExceptionHandler exceptionHandler
 ) :
     IMauiApp,
     IDisposable
@@ -65,11 +57,6 @@ internal partial class MauiApp<TMainViewModel>(
                 );
             }
         };
-
-        appHost.Closed
-            .Observe()
-            .OnEach(() => Application.Current?.CloseWindow(hostWindow))
-            .Until(cancellationTokenProvider.CancellationToken);
     }
 
     /// <inheritdoc/>
