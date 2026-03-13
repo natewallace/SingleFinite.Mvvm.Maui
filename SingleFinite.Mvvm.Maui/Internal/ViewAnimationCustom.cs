@@ -23,18 +23,11 @@ namespace SingleFinite.Mvvm.Maui.Internal;
 
 /// <summary>A custom animation to apply to a View.</summary>
 /// <param name="runAsync">The function called by the RunAsync method.</param>
-/// <param name="initialize">
-/// The optional action called by the Initialize method.
-/// </param>
 internal class ViewAnimationCustom(
-    Func<View, Task<bool>> runAsync,
-    Action<View>? initialize = null
+    Func<View, Task<bool>> runAsync
 ) : ViewAnimation
 {
     #region Methods
-
-    /// <inheritdoc/>
-    public override void Initialize(View view) => initialize?.Invoke(view);
 
     /// <inheritdoc/>
     public override Task<bool> RunAsync(View view) => runAsync(view);

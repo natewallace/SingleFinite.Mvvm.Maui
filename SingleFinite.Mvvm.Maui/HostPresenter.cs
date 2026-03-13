@@ -20,26 +20,26 @@
 // SOFTWARE.
 
 using SingleFinite.Essentials;
-using SingleFinite.Mvvm.Services;
+using SingleFinite.Mvvm.Services.Presenters;
 
 namespace SingleFinite.Mvvm.Maui;
 
 /// <summary>
 /// Presents views in a simple control.
 /// </summary>
-public partial class PresentableHost : TemplatedView
+public partial class HostPresenter : TemplatedView
 {
     #region Fields
 
     /// <summary>
-    /// Observer for view changes on the source presentable.
+    /// Observer for view changes on the source presenter.
     /// </summary>
     private IDisposable? _sourceViewObserver;
 
     /// <summary>
     /// Used to animate transitions between views.
     /// </summary>
-    private readonly AnimatedContentPresenter _animatedContentPresenter = new();
+    private readonly AnimatedContent _animatedContentPresenter = new();
 
     #endregion
 
@@ -48,7 +48,7 @@ public partial class PresentableHost : TemplatedView
     /// <summary>
     /// Constructor.
     /// </summary>
-    public PresentableHost()
+    public HostPresenter()
     {
         Loaded += (_, _) => Subscribe();
         Unloaded += (_, _) => Unsubscribe();
@@ -59,9 +59,9 @@ public partial class PresentableHost : TemplatedView
     #region Properties
 
     /// <summary>
-    /// The presentable whose views will be displayed in this control.
+    /// The presenter whose views will be displayed in this control.
     /// </summary>
-    public IPresentable? Source
+    public IPresenter? Source
     {
         get;
         set
@@ -117,7 +117,7 @@ public partial class PresentableHost : TemplatedView
     }
 
     /// <summary>
-    /// Observe changes to the current view of the presentable.
+    /// Observe changes to the current view of the presenter.
     /// </summary>
     private void Subscribe()
     {
@@ -140,7 +140,7 @@ public partial class PresentableHost : TemplatedView
     }
 
     /// <summary>
-    /// Stop observing changes to the current view of the presentable.
+    /// Stop observing changes to the current view of the presenter.
     /// </summary>
     private void Unsubscribe()
     {

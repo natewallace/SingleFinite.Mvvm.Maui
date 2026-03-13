@@ -24,7 +24,7 @@ namespace SingleFinite.Mvvm.Maui;
 /// <summary>
 /// Animates the transition from one view to another.
 /// </summary>
-public partial class AnimatedContentPresenter : TemplatedView
+public partial class AnimatedContent : TemplatedView
 {
     #region Fields
 
@@ -81,13 +81,11 @@ public partial class AnimatedContentPresenter : TemplatedView
         if (exitingView is not null)
         {
             exitingView.CancelAnimations();
-            exitAnimation.Initialize(exitingView);
         }
 
         if (view is not null)
         {
             view.CancelAnimations();
-            enterAnimation.Initialize(view);
             _layout.Children.Add(view);
         }
 

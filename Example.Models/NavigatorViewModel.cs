@@ -25,12 +25,12 @@ using SingleFinite.Example.Models.Pages.Errors;
 using SingleFinite.Example.Models.Pages.Frame;
 using SingleFinite.Example.Models.Pages.Home;
 using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services;
+using SingleFinite.Mvvm.Services.Presenters;
 
 namespace SingleFinite.Example.Models;
 
 public partial class NavigatorViewModel(
-    IPresentableItem presentableItem
+    IItemPresenter itemPresenter
 ) : ViewModel
 {
     public string? SelectedPage
@@ -43,7 +43,7 @@ public partial class NavigatorViewModel(
         );
     }
 
-    public IPresentableItem PresentableItem => presentableItem;
+    public IItemPresenter ItemPresenter => itemPresenter;
 
     protected override void OnCreated()
     {
@@ -62,16 +62,16 @@ public partial class NavigatorViewModel(
             _ => null
         };
 
-        if (presentableItem.Current?.ViewModel?.GetType() == viewModelType)
+        if (itemPresenter.Current?.ViewModel?.GetType() == viewModelType)
             return;
 
         if (viewModelType is null)
         {
-            presentableItem.Clear();
+            itemPresenter.Clear();
             return;
         }
 
-        presentableItem.Set(
+        itemPresenter.Set(
             new ViewModelDescriptor(
                 ViewModelType: viewModelType,
                 ViewModelParameters: []

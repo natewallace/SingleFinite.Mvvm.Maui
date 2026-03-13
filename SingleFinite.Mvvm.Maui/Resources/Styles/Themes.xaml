@@ -4,8 +4,7 @@
              xmlns:local="using:SingleFinite.Mvvm.Maui"
              x:Class="SingleFinite.Mvvm.Maui.Resources.Themes">
 
-
-    <Style TargetType="local:AnimatedContentPresenter">
+    <Style TargetType="local:AnimatedContent">
         <Setter Property="ControlTemplate">
             <ControlTemplate>
                 <ContentPresenter
@@ -27,7 +26,7 @@
         </Setter>
     </Style>
     
-    <Style TargetType="local:PresentableHost">
+    <Style TargetType="local:HostPresenter">
         <Setter Property="IsClippedToBounds" Value="True" />
         <Setter Property="ControlTemplate">
             <ControlTemplate>
@@ -51,7 +50,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="local:PresentableDialogHost">
+    <Style TargetType="local:DialogHostPresenter">
         <Setter Property="ScrimBackgroundColor" Value="#84888480" />
         <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=#1f1f1f}" />
         <Setter Property="DialogShape" Value="RoundRectangle 4" />
@@ -63,8 +62,9 @@
                         <Rectangle
                             x:Name="Scrim"
                             BackgroundColor="{TemplateBinding ScrimBackgroundColor}"
+                            Opacity="0"
                             />
-                        <local:AnimatedContentPresenter
+                        <local:AnimatedContent
                             x:Name="ContentPresenter"
                             />
                     </Grid>

@@ -46,15 +46,10 @@ public static class ViewAnimationExtensions
         /// Create a custom animation.
         /// </summary>
         /// <param name="runAsync">The function called by the RunAsync method.</param>
-        /// <param name="initialize">
-        /// The optional action called by the Initialize method.
-        /// </param>
         /// <returns>A custom ViewAnimation.</returns>
         public static ViewAnimation Custom(
-            Action<View>? initialize = null,
             Func<View, Task<bool>>? runAsync = null
         ) => new ViewAnimationCustom(
-            initialize: initialize,
             runAsync: runAsync ?? (_ => Task.FromResult(true))
         );
 
@@ -73,7 +68,6 @@ public static class ViewAnimationExtensions
             uint duration = DefaultAnimationDuration,
             Easing? easing = null
         ) => new ViewAnimationCustom(
-            initialize: view => view.Opacity = 0.0,
             runAsync: view => view.FadeToAsync(
                 opacity: 1.0,
                 length: duration,
@@ -118,7 +112,6 @@ public static class ViewAnimationExtensions
             uint duration = DefaultAnimationDuration,
             Easing? easing = null
         ) => new ViewAnimationCustom(
-            initialize: view => view.Scale = 0.0,
             runAsync: view => view.ScaleToAsync(
                 scale: 1.0,
                 length: duration,
@@ -153,14 +146,12 @@ public static class ViewAnimationExtensions
         /// </summary>
         /// <param name="x">The target x coordinate.</param>
         /// <param name="y">The target y coordinate.</param>
-        /// <param name="initialX">The starting x coordinate.</param>
-        /// <param name="initialY">The starting y coordinate.</param>
         /// <param name="duration">
         /// The duration for the animation in milliseconds.
         /// </param>
         /// <param name="easing">
         /// The easing function to use for the animation.  If not specified the
-        /// Easing.SinInOut function is used.
+        /// Easing.Linear function is used.
         /// </param>
         /// <returns>
         /// A ViewAnimation that translates the view position.
@@ -168,21 +159,14 @@ public static class ViewAnimationExtensions
         public static ViewAnimation Translate(
             double x,
             double y,
-            double initialX = 0.0,
-            double initialY = 0.0,
             uint duration = DefaultAnimationDuration,
             Easing? easing = null
         ) => new ViewAnimationCustom(
-            initialize: view => 
-            {
-                view.TranslationX = initialX;
-                view.TranslationY = initialY;
-            },
             runAsync: view => view.TranslateToAsync(
                 x: x,
                 y: y,
                 length: duration,
-                easing: easing ?? Easing.SinOut
+                easing: easing ?? Easing.Linear
             )
         );
     }

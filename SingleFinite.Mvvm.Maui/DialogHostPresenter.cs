@@ -22,14 +22,14 @@
 using System.ComponentModel;
 using Microsoft.Maui.Controls.Shapes;
 using SingleFinite.Essentials;
-using SingleFinite.Mvvm.Services;
+using SingleFinite.Mvvm.Services.Presenters;
 
 namespace SingleFinite.Mvvm.Maui;
 
 /// <summary>
 /// A view that hosts dialog views.
 /// </summary>
-public partial class PresentableDialogHost : TemplatedView
+public partial class DialogHostPresenter : TemplatedView
 {
     #region Fields
 
@@ -40,7 +40,7 @@ public partial class PresentableDialogHost : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(ScrimBackgroundColor),
             returnType: typeof(Color),
-            declaringType: typeof(PresentableDialogHost),
+            declaringType: typeof(DialogHostPresenter),
             defaultValue: null
         );
 
@@ -51,7 +51,7 @@ public partial class PresentableDialogHost : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(DialogBackgroundColor),
             returnType: typeof(Color),
-            declaringType: typeof(PresentableDialogHost),
+            declaringType: typeof(DialogHostPresenter),
             defaultValue: null
         );
 
@@ -62,7 +62,7 @@ public partial class PresentableDialogHost : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(DialogShape),
             returnType: typeof(IShape),
-            declaringType: typeof(PresentableDialogHost),
+            declaringType: typeof(DialogHostPresenter),
             defaultValue: new Rectangle()
         );
 
@@ -73,7 +73,7 @@ public partial class PresentableDialogHost : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(DialogShadow),
             returnType: typeof(Shadow),
-            declaringType: typeof(PresentableDialogHost),
+            declaringType: typeof(DialogHostPresenter),
             defaultValue: null
         );
 
@@ -85,7 +85,7 @@ public partial class PresentableDialogHost : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(DismissOnTouchOutsideDialog),
             returnType: typeof(bool),
-            declaringType: typeof(PresentableDialogHost),
+            declaringType: typeof(DialogHostPresenter),
             defaultValue: false
         );
 
@@ -96,7 +96,7 @@ public partial class PresentableDialogHost : TemplatedView
     private TemplateControls? _templateControls;
 
     /// <summary>
-    /// Observer for view changes on the source presentable.
+    /// Observer for view changes on the source presenter.
     /// </summary>
     private IDisposable? _sourceViewObserver;
 
@@ -107,7 +107,7 @@ public partial class PresentableDialogHost : TemplatedView
     /// <summary>
     /// Constructor.
     /// </summary>
-    public PresentableDialogHost()
+    public DialogHostPresenter()
     {
         Loaded += (_, _) => Subscribe();
         Unloaded += (_, _) => Unsubscribe();
@@ -214,9 +214,9 @@ public partial class PresentableDialogHost : TemplatedView
     }
 
     /// <summary>
-    /// The presentable whose views will be displayed in this control.
+    /// The presenter whose views will be displayed in this control.
     /// </summary>
-    public IPresentable? Source
+    public IPresenter? Source
     {
         get;
         set
@@ -261,7 +261,7 @@ public partial class PresentableDialogHost : TemplatedView
         _templateControls = new(
             Root: GetTemplateControl<VisualElement>("Root"),
             Scrim: GetTemplateControl<View>("Scrim"),
-            ContentPresenter: GetTemplateControl<AnimatedContentPresenter>("ContentPresenter")
+            ContentPresenter: GetTemplateControl<AnimatedContent>("ContentPresenter")
         );
 
         _templateControls.Scrim.GestureRecognizers.Add(
@@ -286,7 +286,7 @@ public partial class PresentableDialogHost : TemplatedView
     }
 
     /// <summary>
-    /// Start observing changes to the current view of the presentable.
+    /// Start observing changes to the current view of the presenter.
     /// </summary>
     private void Subscribe()
     {
@@ -309,7 +309,7 @@ public partial class PresentableDialogHost : TemplatedView
     }
 
     /// <summary>
-    /// Stop observing changes to the current view of the presentable.
+    /// Stop observing changes to the current view of the presenter.
     /// </summary>
     private void Unsubscribe()
     {
@@ -345,8 +345,6 @@ public partial class PresentableDialogHost : TemplatedView
 
             if (dialog is not null && !_templateControls.Root.IsVisible)
             {
-                ScrimEnterTransition.Initialize(_templateControls.Scrim);
-
                 _templateControls.Root.IsVisible = true;
 
                 tasks.Add(ScrimEnterTransition.RunAsync(_templateControls.Scrim));
@@ -362,8 +360,6 @@ public partial class PresentableDialogHost : TemplatedView
             }
             else if (dialog is null && _templateControls.Root.IsVisible)
             {
-                ScrimExitTransition.Initialize(_templateControls.Scrim);
-
                 tasks.Add(ScrimExitTransition.RunAsync(_templateControls.Scrim));
                 tasks.Add(
                     _templateControls.ContentPresenter.SetContentAsync(
@@ -412,7 +408,7 @@ public partial class PresentableDialogHost : TemplatedView
     private record TemplateControls(
         VisualElement Root,
         View Scrim,
-        AnimatedContentPresenter ContentPresenter
+        AnimatedContent ContentPresenter
     );
 
     #endregion

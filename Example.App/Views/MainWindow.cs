@@ -16,11 +16,11 @@ public partial class MainWindow : Window, IView<MainViewModel>
             {
                 Children =
                 {
-                    new PresentableHost()
+                    new HostPresenter()
                     {
                         Source = ViewModel.Content
                     },
-                    new PresentableDialogHost()
+                    new DialogHostPresenter()
                     {
                         Source = ViewModel.Dialog
                     }

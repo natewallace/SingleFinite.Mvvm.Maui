@@ -31,13 +31,6 @@ public abstract class ViewAnimation
     #region Methods
 
     /// <summary>
-    /// Perform any initialization needed on the view before the animation is
-    /// run.
-    /// </summary>
-    /// <param name="view">The view to initialize.</param>
-    public abstract void Initialize(View view);
-
-    /// <summary>
     /// Run this animation on the view.
     /// </summary>
     /// <param name="view">The view to animate.</param>

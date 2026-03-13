@@ -21,6 +21,7 @@
 
 using SingleFinite.Mvvm;
 using SingleFinite.Mvvm.Services;
+using SingleFinite.Mvvm.Services.Presenters;
 
 namespace SingleFinite.Example.Models;
 
@@ -31,7 +32,7 @@ namespace SingleFinite.Example.Models;
 /// <param name="content">Content presenter.</param>
 public partial class MainViewModel(
     IAppDialog dialog,
-    IPresentableItem content
+    IItemPresenter content
 ) : ViewModel
 {
     #region Properties
@@ -44,14 +45,14 @@ public partial class MainViewModel(
     /// <summary>
     /// Content presenter.
     /// </summary>
-    public IPresentableItem Content => content;
+    public IItemPresenter Content => content;
 
     #endregion
 
     #region Methods
 
     /// <summary>
-    /// Initialize observers and presentables.
+    /// Initialize presenter.
     /// </summary>
     protected override void OnCreated()
     {
