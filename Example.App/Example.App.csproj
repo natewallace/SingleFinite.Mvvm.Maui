@@ -70,4 +70,8 @@
 	  <ProjectReference Include="..\SingleFinite.Mvvm.Maui\SingleFinite.Mvvm.Maui.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Views\Pages\" />
+	</ItemGroup>
+
 </Project>

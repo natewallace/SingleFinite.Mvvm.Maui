@@ -1,4 +1,4 @@
-﻿using SingleFinite.Example.Models;
+﻿using Example.Models;
 using SingleFinite.Mvvm;
 using SingleFinite.Mvvm.Maui;
 
@@ -16,11 +16,11 @@ public partial class MainWindow : Window, IView<MainViewModel>
             {
                 Children =
                 {
-                    new HostPresenter()
+                    new ViewPresenter()
                     {
                         Source = ViewModel.Content
                     },
-                    new DialogHostPresenter()
+                    new DialogViewPresenter()
                     {
                         Source = ViewModel.Dialog
                     }

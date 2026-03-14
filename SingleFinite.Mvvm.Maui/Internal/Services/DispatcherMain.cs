@@ -26,14 +26,10 @@ namespace SingleFinite.Mvvm.Maui.Internal.Services;
 
 /// <summary>
 /// Implementation of <see cref="IMainDispatcher"/> that uses the
-/// <see cref="Microsoft.Maui.Dispatching.Dispatcher"/> from the main window to
-/// execute functions.
+/// <see cref="Dispatcher"/> from the main window to execute functions.
 /// </summary>
-/// <remarks>
-/// Constructor.
-/// </remarks>
-/// <param name="mainWindow">The main window for the app.</param>
-internal partial class DispatcherMain(IMainWindow mainWindow) : IMainDispatcher
+/// <param name="app">The maui app whose window dispatcher will be used.</param>
+internal partial class DispatcherMain(IMauiApp app) : IMainDispatcher
 {
     #region Methods
 
@@ -43,12 +39,9 @@ internal partial class DispatcherMain(IMainWindow mainWindow) : IMainDispatcher
         CancellationToken cancellationToken = default
     )
     {
-        var dispatcher = mainWindow.Current?.Dispatcher ??
-            throw new InvalidOperationException("Main window is null.");
-
         var taskCompletionSource = new TaskCompletionSource<TResult>();
 
-        dispatcher.DispatchAsync(async () =>
+        app.Window.Dispatcher.DispatchAsync(async () =>
         {
             try
             {

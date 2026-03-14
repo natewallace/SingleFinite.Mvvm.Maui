@@ -1,4 +1,25 @@
-﻿using SingleFinite.Mvvm.Maui.Services;
+﻿// MIT License
+// Copyright (c) 2026 Single Finite
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights 
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+// copies of the Software, and to permit persons to whom the Software is 
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in 
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+using SingleFinite.Mvvm.Maui.Services;
 using SingleFinite.Mvvm.Services;
 
 namespace SingleFinite.Mvvm.Maui.Internal.Services;
@@ -6,27 +27,49 @@ namespace SingleFinite.Mvvm.Maui.Internal.Services;
 /// <summary>
 /// Implementation of <see cref="IMauiApp"/>.
 /// </summary>
-/// <param name="mainWindow">Hold the main window for the app.</param>
-/// <param name="viewBuilder">Used to build HostWindow view.</param>
+/// <param name="viewBuilder">Used to build main view.</param>
 /// <param name="exceptionHandler">Used to log unhandled exceptions.</param>
 /// <typeparam name="TMainViewModel">
-/// The type of view model to build for the HostWindow.
+/// The type of view model to build for the main window.
 /// </typeparam>
 internal partial class MauiApp<TMainViewModel>(
-    IMainWindowProvider mainWindow,
     IViewBuilder viewBuilder,
     IExceptionHandler exceptionHandler
 ) :
-    IMauiApp,
+    IMauiApp<TMainViewModel>,
     IDisposable
     where TMainViewModel : IViewModel
 {
     #region Fields
 
     /// <summary>
+    /// Set to true when the app has been started.
+    /// </summary>
+    private bool _isStarted;
+
+    /// <summary>
     /// Set to true when the app has been disposed.
     /// </summary>
     private bool _isDisposed;
+
+    #endregion
+
+    #region Properties
+
+    /// <inheritdoc/>
+    public IView<TMainViewModel> View
+    {
+        get => field ?? throw new InvalidOperationException(
+            "The app has not been started yet."
+        );
+        private set;
+    }
+
+    /// <inheritdoc/>
+    public Window Window => View as Window ??
+        throw new InvalidOperationException(
+            "The view for the main view model must be a Window."
+        );
 
     #endregion
 
@@ -37,15 +80,10 @@ internal partial class MauiApp<TMainViewModel>(
     {
         ObjectDisposedException.ThrowIf(_isDisposed, this);
 
-        if (mainWindow.Current is not null)
+        if (_isStarted)
             return;
 
-        var hostWindow = viewBuilder.Build<TMainViewModel>() as Window ??
-            throw new InvalidOperationException(
-                "The view for the host view model must be a Window."
-            );
-
-        mainWindow.Current = hostWindow;
+        View = viewBuilder.Build<TMainViewModel>();
 
         AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
         {
@@ -57,15 +95,15 @@ internal partial class MauiApp<TMainViewModel>(
                 );
             }
         };
+
+        _isStarted = true;
     }
 
     /// <inheritdoc/>
     public void Activate()
     {
         ObjectDisposedException.ThrowIf(_isDisposed, this);
-
-        if (mainWindow.Current is Window window)
-            Application.Current?.ActivateWindow(window);
+        Application.Current?.ActivateWindow(Window);
     }
 
     /// <summary>

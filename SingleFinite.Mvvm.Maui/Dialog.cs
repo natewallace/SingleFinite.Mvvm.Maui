@@ -25,7 +25,7 @@ using Microsoft.Maui.Controls.Shapes;
 namespace SingleFinite.Mvvm.Maui;
 
 /// <summary>
-/// A dialog that is displayed within a DialogHost.
+/// A dialog that is displayed within a DialogViewPresenter.
 /// </summary>
 internal partial class Dialog : TemplatedView
 {

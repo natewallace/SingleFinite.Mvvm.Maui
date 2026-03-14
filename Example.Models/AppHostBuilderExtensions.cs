@@ -19,15 +19,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using SingleFinite.Essentials;
 using SingleFinite.Mvvm;
 
-namespace SingleFinite.Example.Models.Pages.Dialogs;
+namespace Example.Models;
 
-public class SecondDialogViewModel : ViewModel, ICloseObservable
+public static class AppHostBuilderExtensions
 {
-    public void Close() => _closedSource.Emit(this);
-
-    public IEventObservable<ICloseObservable> Closed => _closedSource.Observable;
-    private readonly EventObservableSource<ICloseObservable> _closedSource = new();
+    extension(AppHostBuilder builder)
+    {
+        public AppHostBuilder AddExampleModels() => builder;
+    }
 }

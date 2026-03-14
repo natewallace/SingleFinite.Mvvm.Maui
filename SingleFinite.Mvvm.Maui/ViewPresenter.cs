@@ -27,7 +27,7 @@ namespace SingleFinite.Mvvm.Maui;
 /// <summary>
 /// Presents views in a simple control.
 /// </summary>
-public partial class HostPresenter : TemplatedView
+public partial class ViewPresenter : TemplatedView
 {
     #region Fields
 
@@ -48,7 +48,7 @@ public partial class HostPresenter : TemplatedView
     /// <summary>
     /// Constructor.
     /// </summary>
-    public HostPresenter()
+    public ViewPresenter()
     {
         Loaded += (_, _) => Subscribe();
         Unloaded += (_, _) => Unsubscribe();
@@ -80,25 +80,25 @@ public partial class HostPresenter : TemplatedView
     /// <summary>
     /// The animation to run when a view enters the control going forward.
     /// </summary>
-    public ViewAnimation EnterForwardTransition { get; set; } =
+    public ViewAnimation EnterForwardAnimation { get; set; } =
         ViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when a view enters the control going backward.
     /// </summary>
-    public ViewAnimation EnterBackwardTransition { get; set; } =
+    public ViewAnimation EnterBackwardAnimation { get; set; } =
         ViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when a view exits the control going forward.
     /// </summary>
-    public ViewAnimation ExitForwardTransition { get; set; } =
+    public ViewAnimation ExitForwardAnimation { get; set; } =
         ViewAnimation.FadeOut();
 
     /// <summary>
     /// The animation to run when a view exits the control going backward.
     /// </summary>
-    public ViewAnimation ExitBackwardTransition { get; set; } =
+    public ViewAnimation ExitBackwardAnimation { get; set; } =
         ViewAnimation.FadeOut();
 
     #endregion
@@ -158,8 +158,8 @@ public partial class HostPresenter : TemplatedView
         MainThread.BeginInvokeOnMainThread(async () =>
             await _animatedContentPresenter.SetContentAsync(
                 view: view as View,
-                enterTransition: isNew ? EnterForwardTransition : EnterBackwardTransition,
-                exitTransition: isNew ? ExitForwardTransition : ExitBackwardTransition
+                enterAnimation: isNew ? EnterForwardAnimation : EnterBackwardAnimation,
+                exitAnimation: isNew ? ExitForwardAnimation : ExitBackwardAnimation
             )
         );
     }

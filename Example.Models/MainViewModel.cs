@@ -20,43 +20,53 @@
 // SOFTWARE.
 
 using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services;
 using SingleFinite.Mvvm.Services.Presenters;
 
-namespace SingleFinite.Example.Models;
+namespace Example.Models;
 
 /// <summary>
-/// The host view model.
+/// Interface for the main view model.
+/// </summary>
+public interface IMainViewModel
+{
+    /// <summary>
+    /// The dialog presenter for the app.
+    /// </summary>
+    IDialogPresenter Dialog { get; }
+
+    /// <summary>
+    /// The content for the app.
+    /// </summary>
+    IStackPresenter Content { get; }
+}
+
+/// <summary>
+/// The main view model.
 /// </summary>
 /// <param name="dialog">Dialog presenter.</param>
 /// <param name="content">Content presenter.</param>
 public partial class MainViewModel(
-    IAppDialog dialog,
-    IItemPresenter content
-) : ViewModel
+    IDialogPresenter dialog,
+    IStackPresenter content
+) : ViewModel, IMainViewModel
 {
     #region Properties
 
-    /// <summary>
-    /// Dialog presenter.
-    /// </summary>
-    public IAppDialog Dialog => dialog;
+    /// <inheritdoc />
+    public IDialogPresenter Dialog => dialog;
 
-    /// <summary>
-    /// Content presenter.
-    /// </summary>
-    public IItemPresenter Content => content;
+    /// <inheritdoc />
+    public IStackPresenter Content => content;
 
     #endregion
 
     #region Methods
 
     /// <summary>
-    /// Initialize presenter.
+    /// Initialize the app.
     /// </summary>
     protected override void OnCreated()
     {
-        content.Set<NavigatorViewModel>();
     }
 
     #endregion

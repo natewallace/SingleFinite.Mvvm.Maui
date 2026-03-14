@@ -29,7 +29,7 @@ namespace SingleFinite.Mvvm.Maui;
 /// <summary>
 /// A view that hosts dialog views.
 /// </summary>
-public partial class DialogHostPresenter : TemplatedView
+public partial class DialogViewPresenter : TemplatedView
 {
     #region Fields
 
@@ -40,7 +40,7 @@ public partial class DialogHostPresenter : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(ScrimBackgroundColor),
             returnType: typeof(Color),
-            declaringType: typeof(DialogHostPresenter),
+            declaringType: typeof(DialogViewPresenter),
             defaultValue: null
         );
 
@@ -51,7 +51,7 @@ public partial class DialogHostPresenter : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(DialogBackgroundColor),
             returnType: typeof(Color),
-            declaringType: typeof(DialogHostPresenter),
+            declaringType: typeof(DialogViewPresenter),
             defaultValue: null
         );
 
@@ -62,7 +62,7 @@ public partial class DialogHostPresenter : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(DialogShape),
             returnType: typeof(IShape),
-            declaringType: typeof(DialogHostPresenter),
+            declaringType: typeof(DialogViewPresenter),
             defaultValue: new Rectangle()
         );
 
@@ -73,7 +73,7 @@ public partial class DialogHostPresenter : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(DialogShadow),
             returnType: typeof(Shadow),
-            declaringType: typeof(DialogHostPresenter),
+            declaringType: typeof(DialogViewPresenter),
             defaultValue: null
         );
 
@@ -85,7 +85,7 @@ public partial class DialogHostPresenter : TemplatedView
         BindableProperty.Create(
             propertyName: nameof(DismissOnTouchOutsideDialog),
             returnType: typeof(bool),
-            declaringType: typeof(DialogHostPresenter),
+            declaringType: typeof(DialogViewPresenter),
             defaultValue: false
         );
 
@@ -107,7 +107,7 @@ public partial class DialogHostPresenter : TemplatedView
     /// <summary>
     /// Constructor.
     /// </summary>
-    public DialogHostPresenter()
+    public DialogViewPresenter()
     {
         Loaded += (_, _) => Subscribe();
         Unloaded += (_, _) => Unsubscribe();
@@ -158,49 +158,49 @@ public partial class DialogHostPresenter : TemplatedView
     /// <summary>
     /// The animation to run when the scrim enters.
     /// </summary>
-    public ViewAnimation ScrimEnterTransition { get; set; } =
+    public ViewAnimation ScrimEnterAnimation { get; set; } =
         ViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when the scrim exits.
     /// </summary>
-    public ViewAnimation ScrimExitTransition { get; set; } =
+    public ViewAnimation ScrimExitAnimation { get; set; } =
         ViewAnimation.FadeOut();
 
     /// <summary>
     /// The animation to run when the first dialog enters.  If not set the
-    /// DialogEnterForwardTransition value will be used.
+    /// DialogEnterForwardAnimation value will be used.
     /// </summary>
-    public ViewAnimation? FirstDialogEnterTransition { get; set; }
+    public ViewAnimation? FirstDialogEnterAnimation { get; set; }
 
     /// <summary>
     /// The animation to run when the first dialog exits.  If not set the
-    /// DialogExitBackwardTransition value will be used.
+    /// DialogExitBackwardAnimation value will be used.
     /// </summary>
-    public ViewAnimation? FirstDialogExitTransition { get; set; }
+    public ViewAnimation? FirstDialogExitAnimation { get; set; }
 
     /// <summary>
     /// The animation to run when a dialog enters going forward.
     /// </summary>
-    public ViewAnimation DialogEnterForwardTransition { get; set; } =
+    public ViewAnimation DialogEnterForwardAnimation { get; set; } =
         ViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when a content enters going backward.
     /// </summary>
-    public ViewAnimation DialogEnterBackwardTransition { get; set; } =
+    public ViewAnimation DialogEnterBackwardAnimation { get; set; } =
         ViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when a dialog exits going forward.
     /// </summary>
-    public ViewAnimation DialogExitForwardTransition { get; set; } =
+    public ViewAnimation DialogExitForwardAnimation { get; set; } =
         ViewAnimation.FadeOut();
 
     /// <summary>
     /// The animation to run when a dialog exits going backward.
     /// </summary>
-    public ViewAnimation DialogExitBackwardTransition { get; set; } =
+    public ViewAnimation DialogExitBackwardAnimation { get; set; } =
         ViewAnimation.FadeOut();
 
     /// <summary>
@@ -347,12 +347,12 @@ public partial class DialogHostPresenter : TemplatedView
             {
                 _templateControls.Root.IsVisible = true;
 
-                tasks.Add(ScrimEnterTransition.RunAsync(_templateControls.Scrim));
+                tasks.Add(ScrimEnterAnimation.RunAsync(_templateControls.Scrim));
                 tasks.Add(
                     _templateControls.ContentPresenter.SetContentAsync(
                         view: dialog,
-                        enterTransition: FirstDialogEnterTransition ?? DialogEnterForwardTransition,
-                        exitTransition: DialogExitForwardTransition
+                        enterAnimation: FirstDialogEnterAnimation ?? DialogEnterForwardAnimation,
+                        exitAnimation: DialogExitForwardAnimation
                     )
                 );
 
@@ -360,12 +360,12 @@ public partial class DialogHostPresenter : TemplatedView
             }
             else if (dialog is null && _templateControls.Root.IsVisible)
             {
-                tasks.Add(ScrimExitTransition.RunAsync(_templateControls.Scrim));
+                tasks.Add(ScrimExitAnimation.RunAsync(_templateControls.Scrim));
                 tasks.Add(
                     _templateControls.ContentPresenter.SetContentAsync(
                         view: dialog,
-                        enterTransition: DialogEnterBackwardTransition,
-                        exitTransition: FirstDialogExitTransition ?? DialogExitBackwardTransition
+                        enterAnimation: DialogEnterBackwardAnimation,
+                        exitAnimation: FirstDialogExitAnimation ?? DialogExitBackwardAnimation
                     )
                 );
 
@@ -377,8 +377,8 @@ public partial class DialogHostPresenter : TemplatedView
             {
                 await _templateControls.ContentPresenter.SetContentAsync(
                     view: dialog,
-                    enterTransition: isNew ? DialogEnterForwardTransition : DialogEnterBackwardTransition,
-                    exitTransition: isNew ? DialogExitForwardTransition : DialogExitBackwardTransition
+                    enterAnimation: isNew ? DialogEnterForwardAnimation : DialogEnterBackwardAnimation,
+                    exitAnimation: isNew ? DialogExitForwardAnimation : DialogExitBackwardAnimation
                 );
             }
         });

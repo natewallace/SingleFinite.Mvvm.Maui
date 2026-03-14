@@ -26,7 +26,7 @@
         </Setter>
     </Style>
     
-    <Style TargetType="local:HostPresenter">
+    <Style TargetType="local:ViewPresenter">
         <Setter Property="IsClippedToBounds" Value="True" />
         <Setter Property="ControlTemplate">
             <ControlTemplate>
@@ -50,7 +50,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="local:DialogHostPresenter">
+    <Style TargetType="local:DialogViewPresenter">
         <Setter Property="ScrimBackgroundColor" Value="#84888480" />
         <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=#1f1f1f}" />
         <Setter Property="DialogShape" Value="RoundRectangle 4" />

@@ -50,14 +50,14 @@ public partial class AnimatedContent : TemplatedView
 
     /// <summary>
     /// Transition from the current view to the provided view using the
-    /// ExitTransition and EnterTransition animations respectively.
+    /// exitAnimation and enterAnimation animations respectively.
     /// </summary>
     /// <param name="view">The view to transition to.</param>
-    /// <param name="enterTransition">
+    /// <param name="enterAnimation">
     /// The animation to run on the view that is entering.
     /// This defaults to ViewAnimation.FadeIn() if one is not specified.
     /// </param>
-    /// <param name="exitTransition">
+    /// <param name="exitAnimation">
     /// The animation to run on the view that is exiting.
     /// This defaults to ViewAnimation.FadeOut() if one is not specified.
     /// </param>
@@ -67,21 +67,18 @@ public partial class AnimatedContent : TemplatedView
     /// </returns>
     public async Task SetContentAsync(
         View? view,
-        ViewAnimation? enterTransition = null,
-        ViewAnimation? exitTransition = null
+        ViewAnimation? enterAnimation = null,
+        ViewAnimation? exitAnimation = null
     )
     {
-        var enterAnimation = enterTransition ?? ViewAnimation.FadeIn();
-        var exitAnimation = exitTransition ?? ViewAnimation.FadeOut();
+        var resolvedEnterAnimation = enterAnimation ?? ViewAnimation.FadeIn();
+        var resolvedExitAnimation = exitAnimation ?? ViewAnimation.FadeOut();
 
         var exitingView = _layout.Children.FirstOrDefault() as View;
         if (view is not null && view == exitingView)
             return;
 
-        if (exitingView is not null)
-        {
-            exitingView.CancelAnimations();
-        }
+        exitingView?.CancelAnimations();
 
         if (view is not null)
         {
@@ -90,11 +87,11 @@ public partial class AnimatedContent : TemplatedView
         }
 
         var exitTask = exitingView is not null ?
-            exitAnimation.RunAsync(exitingView) :
+            resolvedExitAnimation.RunAsync(exitingView) :
             Task.CompletedTask;
 
         var enterTask = view is not null ?
-            enterAnimation.RunAsync(view) :
+            resolvedEnterAnimation.RunAsync(view) :
             Task.CompletedTask;
 
         await Task.WhenAll(exitTask, enterTask);
