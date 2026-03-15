@@ -26,30 +26,35 @@ namespace SingleFinite.Mvvm.Maui;
 /// <summary>
 /// Extension members for ViewAnimation.
 /// </summary>
-public static class ViewAnimationExtensions
+public static class IViewAnimationExtensions
 {
     /// <summary>
     /// Animation duration in milleseconds used as the default.
     /// </summary>
     private const uint DefaultAnimationDuration = 375;
 
-    extension(ViewAnimation)
+    extension(IViewAnimation)
     {
         /// <summary>
         /// A ViewAnimation that does nothing.
         /// </summary>
-        public static ViewAnimation None() => new ViewAnimationCustom(
+        public static IViewAnimation None() => new ViewAnimationCustom(
             runAsync: _ => Task.FromResult(false)
         );
 
         /// <summary>
         /// Create a custom animation.
         /// </summary>
+        /// <param name="initialize">
+        /// The optional action called by the Initialize method.
+        /// </param>
         /// <param name="runAsync">The function called by the RunAsync method.</param>
         /// <returns>A custom ViewAnimation.</returns>
-        public static ViewAnimation Custom(
+        public static IViewAnimation Custom(
+            Action<View>? initialize = null,
             Func<View, Task<bool>>? runAsync = null
         ) => new ViewAnimationCustom(
+            initialize: initialize,
             runAsync: runAsync ?? (_ => Task.FromResult(true))
         );
 
@@ -64,10 +69,11 @@ public static class ViewAnimationExtensions
         /// Easing.SinIn function is used.
         /// </param>
         /// <returns>A ViewAnimation that fades a view in.</returns>
-        public static ViewAnimation FadeIn(
+        public static IViewAnimation FadeIn(
             uint duration = DefaultAnimationDuration,
             Easing? easing = null
         ) => new ViewAnimationCustom(
+            initialize: view => view.Opacity = 0.0,
             runAsync: view => view.FadeToAsync(
                 opacity: 1.0,
                 length: duration,
@@ -86,7 +92,7 @@ public static class ViewAnimationExtensions
         /// Easing.SinOut function is used.
         /// </param>
         /// <returns>A ViewAnimation that fades a view out.</returns>
-        public static ViewAnimation FadeOut(
+        public static IViewAnimation FadeOut(
             uint duration = DefaultAnimationDuration,
             Easing? easing = null
         ) => new ViewAnimationCustom(
@@ -108,10 +114,11 @@ public static class ViewAnimationExtensions
         /// Easing.SinIn function is used.
         /// </param>
         /// <returns>A ViewAnimation that scales a view in.</returns>
-        public static ViewAnimation ScaleIn(
+        public static IViewAnimation ScaleIn(
             uint duration = DefaultAnimationDuration,
             Easing? easing = null
         ) => new ViewAnimationCustom(
+            initialize: view => view.Scale = 0.0,
             runAsync: view => view.ScaleToAsync(
                 scale: 1.0,
                 length: duration,
@@ -130,7 +137,7 @@ public static class ViewAnimationExtensions
         /// Easing.SinIn function is used.
         /// </param>
         /// <returns>A ViewAnimation that scales a view out.</returns>
-        public static ViewAnimation ScaleOut(
+        public static IViewAnimation ScaleOut(
             uint duration = DefaultAnimationDuration,
             Easing? easing = null
         ) => new ViewAnimationCustom(
@@ -156,7 +163,7 @@ public static class ViewAnimationExtensions
         /// <returns>
         /// A ViewAnimation that translates the view position.
         /// </returns>
-        public static ViewAnimation Translate(
+        public static IViewAnimation Translate(
             double x,
             double y,
             uint duration = DefaultAnimationDuration,

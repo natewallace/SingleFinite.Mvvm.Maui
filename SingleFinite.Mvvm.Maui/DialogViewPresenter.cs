@@ -158,50 +158,50 @@ public partial class DialogViewPresenter : TemplatedView
     /// <summary>
     /// The animation to run when the scrim enters.
     /// </summary>
-    public ViewAnimation ScrimEnterAnimation { get; set; } =
-        ViewAnimation.FadeIn();
+    public IViewAnimation ScrimEnterAnimation { get; set; } =
+        IViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when the scrim exits.
     /// </summary>
-    public ViewAnimation ScrimExitAnimation { get; set; } =
-        ViewAnimation.FadeOut();
+    public IViewAnimation ScrimExitAnimation { get; set; } =
+        IViewAnimation.FadeOut();
 
     /// <summary>
     /// The animation to run when the first dialog enters.  If not set the
     /// DialogEnterForwardAnimation value will be used.
     /// </summary>
-    public ViewAnimation? FirstDialogEnterAnimation { get; set; }
+    public IViewAnimation? FirstDialogEnterAnimation { get; set; }
 
     /// <summary>
     /// The animation to run when the first dialog exits.  If not set the
     /// DialogExitBackwardAnimation value will be used.
     /// </summary>
-    public ViewAnimation? FirstDialogExitAnimation { get; set; }
+    public IViewAnimation? FirstDialogExitAnimation { get; set; }
 
     /// <summary>
     /// The animation to run when a dialog enters going forward.
     /// </summary>
-    public ViewAnimation DialogEnterForwardAnimation { get; set; } =
-        ViewAnimation.FadeIn();
+    public IViewAnimation DialogEnterForwardAnimation { get; set; } =
+        IViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when a content enters going backward.
     /// </summary>
-    public ViewAnimation DialogEnterBackwardAnimation { get; set; } =
-        ViewAnimation.FadeIn();
+    public IViewAnimation DialogEnterBackwardAnimation { get; set; } =
+        IViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when a dialog exits going forward.
     /// </summary>
-    public ViewAnimation DialogExitForwardAnimation { get; set; } =
-        ViewAnimation.FadeOut();
+    public IViewAnimation DialogExitForwardAnimation { get; set; } =
+        IViewAnimation.FadeOut();
 
     /// <summary>
     /// The animation to run when a dialog exits going backward.
     /// </summary>
-    public ViewAnimation DialogExitBackwardAnimation { get; set; } =
-        ViewAnimation.FadeOut();
+    public IViewAnimation DialogExitBackwardAnimation { get; set; } =
+        IViewAnimation.FadeOut();
 
     /// <summary>
     /// Enable or disable the DismissRequested event from being raised when the
@@ -345,6 +345,8 @@ public partial class DialogViewPresenter : TemplatedView
 
             if (dialog is not null && !_templateControls.Root.IsVisible)
             {
+                ScrimEnterAnimation.Initialize(_templateControls.Scrim);
+
                 _templateControls.Root.IsVisible = true;
 
                 tasks.Add(ScrimEnterAnimation.RunAsync(_templateControls.Scrim));
@@ -360,6 +362,8 @@ public partial class DialogViewPresenter : TemplatedView
             }
             else if (dialog is null && _templateControls.Root.IsVisible)
             {
+                ScrimExitAnimation.Initialize(_templateControls.Scrim);
+
                 tasks.Add(ScrimExitAnimation.RunAsync(_templateControls.Scrim));
                 tasks.Add(
                     _templateControls.ContentPresenter.SetContentAsync(

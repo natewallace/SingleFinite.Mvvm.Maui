@@ -26,9 +26,14 @@ namespace SingleFinite.Mvvm.Maui;
 /// <summary>
 /// An animation that can be applied to a View.
 /// </summary>
-public abstract class ViewAnimation
+public interface IViewAnimation
 {
-    #region Methods
+    /// <summary>
+    /// Perform any initialization needed on the view before the animation is
+    /// run.
+    /// </summary>
+    /// <param name="view">The view to initialize.</param>
+    void Initialize(View view);
 
     /// <summary>
     /// Run this animation on the view.
@@ -38,7 +43,7 @@ public abstract class ViewAnimation
     /// A task that completes once the animation has finished.  If the task
     /// result is true it indicates that the animation was canceled.
     /// </returns>
-    public abstract Task<bool> RunAsync(View view);
+    Task<bool> RunAsync(View view);
 
     /// <summary>
     /// Combine two ViewAnimation instances into a single ViewAnimation that
@@ -53,8 +58,6 @@ public abstract class ViewAnimation
     /// <returns>
     /// A new ViewAnimation that runs both provided ViewAnimations in parallel.
     /// </returns>
-    public static ViewAnimation operator +(ViewAnimation va1, ViewAnimation va2) =>
+    public static IViewAnimation operator +(IViewAnimation va1, IViewAnimation va2) =>
         new ViewAnimationCollection(va1, va2);
-
-    #endregion
 }

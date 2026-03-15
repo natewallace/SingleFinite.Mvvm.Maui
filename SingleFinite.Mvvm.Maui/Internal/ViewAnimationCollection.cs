@@ -28,13 +28,20 @@ namespace SingleFinite.Mvvm.Maui.Internal;
 /// The ViewAnimation instances that make up the collection.
 /// </param>
 internal class ViewAnimationCollection(
-    params IEnumerable<ViewAnimation> viewAnimations
-) : ViewAnimation
+    params IEnumerable<IViewAnimation> viewAnimations
+) : IViewAnimation
 {
     #region Methods
 
     /// <inheritdoc/>
-    public override async Task<bool> RunAsync(View view)
+    public void Initialize(View view)
+    {
+        foreach (var viewAnimation in viewAnimations)
+            viewAnimation.Initialize(view);
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> RunAsync(View view)
     {
         var tasks = viewAnimations.Select(
             viewAnimation => viewAnimation.RunAsync(view)

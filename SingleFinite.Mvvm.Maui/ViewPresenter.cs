@@ -80,26 +80,26 @@ public partial class ViewPresenter : TemplatedView
     /// <summary>
     /// The animation to run when a view enters the control going forward.
     /// </summary>
-    public ViewAnimation EnterForwardAnimation { get; set; } =
-        ViewAnimation.FadeIn();
+    public IViewAnimation EnterForwardAnimation { get; set; } =
+        IViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when a view enters the control going backward.
     /// </summary>
-    public ViewAnimation EnterBackwardAnimation { get; set; } =
-        ViewAnimation.FadeIn();
+    public IViewAnimation EnterBackwardAnimation { get; set; } =
+        IViewAnimation.FadeIn();
 
     /// <summary>
     /// The animation to run when a view exits the control going forward.
     /// </summary>
-    public ViewAnimation ExitForwardAnimation { get; set; } =
-        ViewAnimation.FadeOut();
+    public IViewAnimation ExitForwardAnimation { get; set; } =
+        IViewAnimation.FadeOut();
 
     /// <summary>
     /// The animation to run when a view exits the control going backward.
     /// </summary>
-    public ViewAnimation ExitBackwardAnimation { get; set; } =
-        ViewAnimation.FadeOut();
+    public IViewAnimation ExitBackwardAnimation { get; set; } =
+        IViewAnimation.FadeOut();
 
     #endregion
 

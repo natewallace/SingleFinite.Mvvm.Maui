@@ -67,22 +67,27 @@ public partial class AnimatedContent : TemplatedView
     /// </returns>
     public async Task SetContentAsync(
         View? view,
-        ViewAnimation? enterAnimation = null,
-        ViewAnimation? exitAnimation = null
+        IViewAnimation? enterAnimation = null,
+        IViewAnimation? exitAnimation = null
     )
     {
-        var resolvedEnterAnimation = enterAnimation ?? ViewAnimation.FadeIn();
-        var resolvedExitAnimation = exitAnimation ?? ViewAnimation.FadeOut();
+        var resolvedEnterAnimation = enterAnimation ?? IViewAnimation.FadeIn();
+        var resolvedExitAnimation = exitAnimation ?? IViewAnimation.FadeOut();
 
         var exitingView = _layout.Children.FirstOrDefault() as View;
         if (view is not null && view == exitingView)
             return;
 
-        exitingView?.CancelAnimations();
+        if (exitingView is not null)
+        {
+            exitingView.CancelAnimations();
+            resolvedExitAnimation.Initialize(exitingView);
+        }
 
         if (view is not null)
         {
             view.CancelAnimations();
+            resolvedEnterAnimation.Initialize(view);
             _layout.Children.Add(view);
         }
 

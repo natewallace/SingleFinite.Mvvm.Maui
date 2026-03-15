@@ -62,7 +62,6 @@
                         <Rectangle
                             x:Name="Scrim"
                             BackgroundColor="{TemplateBinding ScrimBackgroundColor}"
-                            Opacity="0"
                             />
                         <local:AnimatedContent
                             x:Name="ContentPresenter"
