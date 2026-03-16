@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Diagnostics;
 using SingleFinite.Mvvm.Maui.Internal;
 
 namespace SingleFinite.Mvvm.Maui;
@@ -175,6 +176,116 @@ public static class IViewAnimationExtensions
                 length: duration,
                 easing: easing ?? Easing.Linear
             )
+        );
+
+        /// <summary>
+        /// Create an animation that slides a view into the screen.
+        /// </summary>
+        /// <param name="direction">The direction of the slide.</param>
+        /// <param name="duration">
+        /// The duration for the animation in milliseconds.
+        /// </param>
+        /// <param name="easing">
+        /// The easing function to use for the animation.  If not specified the
+        /// Easing.Linear function is used.
+        /// </param>
+        /// <returns>
+        /// A ViewAnimation that slides a view into the screen.
+        /// </returns>
+        public static IViewAnimation SlideIn(
+            SlideDirection direction,
+            uint duration = DefaultAnimationDuration,
+            Easing? easing = null
+        ) => new ViewAnimationCustom(
+            initialize: view =>
+            {
+                var width = (view.Parent as VisualElement)?.Width ?? view.Width;
+                var height = (view.Parent as VisualElement)?.Height ?? view.Height;
+                var rtlModifier = view.FlowDirection == FlowDirection.RightToLeft ? -1 : 1;
+
+                switch (direction)
+                {
+                    case SlideDirection.StartToEnd:
+                        view.TranslationX = -width * rtlModifier;
+                        break;
+                    case SlideDirection.EndToStart:
+                        view.TranslationX = width * rtlModifier;
+                        break;
+                    case SlideDirection.TopToBottom:
+                        view.TranslationY = -height;
+                        break;
+                    case SlideDirection.BottomToTop:
+                        view.TranslationY = height;
+                        break;
+                }
+            },
+            runAsync: async view => await view.TranslateToAsync(
+                x: 0,
+                y: 0,
+                length: duration,
+                easing: easing ?? Easing.Linear
+            )
+        );
+
+        /// <summary>
+        /// Create an animation that slides a view out of the screen.
+        /// </summary>
+        /// <param name="direction">The direction of the slide.</param>
+        /// <param name="duration">
+        /// The duration for the animation in milliseconds.
+        /// </param>
+        /// <param name="easing">
+        /// The easing function to use for the animation.  If not specified the
+        /// Easing.Linear function is used.
+        /// </param>
+        /// <returns>
+        /// A ViewAnimation that slides a view out of the screen.
+        /// </returns>
+        public static IViewAnimation SlideOut(
+            SlideDirection direction,
+            uint duration = DefaultAnimationDuration,
+            Easing? easing = null
+        ) => new ViewAnimationCustom(
+            initialize: view =>
+            {
+                view.TranslationX = 0;
+                view.TranslationY = 0;
+            },
+            runAsync: view =>
+            {
+                var width = (view.Parent as VisualElement)?.Width ?? view.Width;
+                var height = (view.Parent as VisualElement)?.Height ?? view.Height;
+                var rtlModifier = view.FlowDirection == FlowDirection.RightToLeft ? -1 : 1;
+
+                return direction switch
+                {
+                    SlideDirection.StartToEnd => view.TranslateToAsync(
+                        x: width * rtlModifier,
+                        y: 0,
+                        length: duration,
+                        easing: easing ?? Easing.Linear
+                    ),
+                    SlideDirection.EndToStart => view.TranslateToAsync(
+                        x: -width * rtlModifier,
+                        y: 0,
+                        length: duration,
+                        easing: easing ?? Easing.Linear
+                    ),
+                    SlideDirection.TopToBottom => view.TranslateToAsync(
+                        x: 0,
+                        y: height,
+                        length: duration,
+                        easing: easing ?? Easing.Linear
+                    ),
+                    SlideDirection.BottomToTop => view.TranslateToAsync(
+                        x: 0,
+                        y: -height,
+                        length: duration,
+                        easing: easing ?? Easing.Linear
+                    ),
+                    _ => Task.FromResult(false)
+                };
+            }
         );
     }
 }

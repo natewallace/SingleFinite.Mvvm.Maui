@@ -83,8 +83,6 @@ internal partial class MauiApp<TMainViewModel>(
         if (_isStarted)
             return;
 
-        View = viewBuilder.Build<TMainViewModel>();
-
         AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
         {
             if (e.ExceptionObject is Exception ex)
@@ -95,6 +93,10 @@ internal partial class MauiApp<TMainViewModel>(
                 );
             }
         };
+
+        var assembleResult = viewBuilder.Assemble<TMainViewModel>();
+        View = assembleResult.View;
+        assembleResult.Start();
 
         _isStarted = true;
     }

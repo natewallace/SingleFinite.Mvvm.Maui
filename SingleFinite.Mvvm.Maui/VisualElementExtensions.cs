@@ -19,57 +19,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Example.Models.Pages;
-using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services.Presenters;
+using SingleFinite.Essentials;
 
-namespace Example.Models;
+namespace SingleFinite.Mvvm.Maui;
 
 /// <summary>
-/// Interface for the main view model.
+/// Extension methods for the VisualElement class.
 /// </summary>
-public interface IMainViewModel
+public static class VisualElementExtensions
 {
-    /// <summary>
-    /// The dialog presenter for the app.
-    /// </summary>
-    IDialogPresenter Dialog { get; }
-
-    /// <summary>
-    /// The content for the app.
-    /// </summary>
-    IStackPresenter Content { get; }
-}
-
-/// <summary>
-/// The main view model.
-/// </summary>
-/// <param name="dialog">Dialog presenter.</param>
-/// <param name="content">Content presenter.</param>
-public partial class MainViewModel(
-    IDialogPresenter dialog,
-    IStackPresenter content
-) : ViewModel, IMainViewModel
-{
-    #region Properties
-
-    /// <inheritdoc />
-    public IDialogPresenter Dialog => dialog;
-
-    /// <inheritdoc />
-    public IStackPresenter Content => content;
-
-    #endregion
-
-    #region Methods
-
-    /// <summary>
-    /// Start the app on the first page.
-    /// </summary>
-    protected override void OnCreated()
+    extension(VisualElement visual)
     {
-        Content.Push<FirstPageViewModel>();
-    }
+        /// <summary>
+        /// Get the resource with the given key.
+        /// </summary>
+        /// <typeparam name="TResource">The type of resource to get.</typeparam>
+        /// <param name="key">The key of the resource to get.</param>
+        /// <returns>
+        /// The specified resource.  If the resource is not found an exception
+        /// will be thrown.
+        /// </returns>
+        public TResource GetResource<TResource>(string key)
+        {
+            if (visual.Resources.TryGetValue(key, out var resource))
+                return (TResource)resource;
 
-    #endregion
+            return (TResource)Application.Current.ThrowIfNull().Resources[key];
+        }
+    }
 }

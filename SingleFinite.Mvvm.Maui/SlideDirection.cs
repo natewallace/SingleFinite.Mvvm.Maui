@@ -19,57 +19,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Example.Models.Pages;
-using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services.Presenters;
-
-namespace Example.Models;
+namespace SingleFinite.Mvvm.Maui;
 
 /// <summary>
-/// Interface for the main view model.
+/// All of the supported slide directions for slide animations.
 /// </summary>
-public interface IMainViewModel
+public enum SlideDirection
 {
     /// <summary>
-    /// The dialog presenter for the app.
+    /// Slide from the start of the screen to the end of the screen.
     /// </summary>
-    IDialogPresenter Dialog { get; }
+    StartToEnd,
 
     /// <summary>
-    /// The content for the app.
+    /// Slide from the end of the screen to the start of the screen.
     /// </summary>
-    IStackPresenter Content { get; }
-}
-
-/// <summary>
-/// The main view model.
-/// </summary>
-/// <param name="dialog">Dialog presenter.</param>
-/// <param name="content">Content presenter.</param>
-public partial class MainViewModel(
-    IDialogPresenter dialog,
-    IStackPresenter content
-) : ViewModel, IMainViewModel
-{
-    #region Properties
-
-    /// <inheritdoc />
-    public IDialogPresenter Dialog => dialog;
-
-    /// <inheritdoc />
-    public IStackPresenter Content => content;
-
-    #endregion
-
-    #region Methods
+    EndToStart,
 
     /// <summary>
-    /// Start the app on the first page.
+    /// Slide from the top of the screen to the bottom of the screen.
     /// </summary>
-    protected override void OnCreated()
-    {
-        Content.Push<FirstPageViewModel>();
-    }
+    TopToBottom,
 
-    #endregion
+    /// <summary>
+    /// Slide from the bottom of the screen to the top of the screen.
+    /// </summary>
+    BottomToTop
 }

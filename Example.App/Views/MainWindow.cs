@@ -1,4 +1,5 @@
 ﻿using Example.Models;
+using SingleFinite.Essentials;
 using SingleFinite.Mvvm;
 using SingleFinite.Mvvm.Maui;
 
@@ -19,23 +20,32 @@ public partial class MainWindow : Window, IView<MainViewModel>
     {
         ViewModel = viewModel;
 
-        Page = new MainWindowContentPage()
-        {
-            Content = new Grid
+        Page = new ContentPage().Also(page =>
+            page.Content = new Grid().Also(grid =>
             {
-                Children =
-                {
-                    new ViewPresenter()
+                grid.Children.Add(
+                    new ViewPresenter().Also(content =>
                     {
-                        Source = ViewModel.Content
-                    },
-                    new DialogViewPresenter()
+                        content.Source = ViewModel.Content;
+                        content.EnterForwardAnimation = IViewAnimation.SlideIn(
+                            direction: SlideDirection.EndToStart
+                        );
+                        content.EnterBackwardAnimation = IViewAnimation.SlideIn(
+                            direction: SlideDirection.StartToEnd
+                        );
+                        content.ExitForwardAnimation = IViewAnimation.None();
+                        content.ExitBackwardAnimation = IViewAnimation.None();
+                    })
+                );
+
+                grid.Children.Add(
+                    new DialogViewPresenter().Also(dialog =>
                     {
-                        Source = ViewModel.Dialog
-                    }
-                }
-            }
-        };
+                        dialog.Source = ViewModel.Dialog;
+                    })
+                );
+            })
+        );
     }
 
     #endregion
@@ -48,11 +58,4 @@ public partial class MainWindow : Window, IView<MainViewModel>
     public MainViewModel ViewModel { get; }
 
     #endregion
-}
-
-/// <summary>
-/// The content page for the main window.
-/// </summary>
-internal sealed partial class MainWindowContentPage : ContentPage
-{
 }

@@ -19,56 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Example.Models.Pages;
 using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services.Presenters;
 
-namespace Example.Models;
-
-/// <summary>
-/// Interface for the main view model.
-/// </summary>
-public interface IMainViewModel
-{
-    /// <summary>
-    /// The dialog presenter for the app.
-    /// </summary>
-    IDialogPresenter Dialog { get; }
-
-    /// <summary>
-    /// The content for the app.
-    /// </summary>
-    IStackPresenter Content { get; }
-}
+namespace Example.Models.Pages;
 
 /// <summary>
-/// The main view model.
+/// The second page of the example.
 /// </summary>
-/// <param name="dialog">Dialog presenter.</param>
-/// <param name="content">Content presenter.</param>
-public partial class MainViewModel(
-    IDialogPresenter dialog,
-    IStackPresenter content
-) : ViewModel, IMainViewModel
+/// <param name="mainViewModel">The main view model.</param>
+public class SecondPageViewModel(
+    IMainViewModel mainViewModel
+) : ViewModel
 {
-    #region Properties
-
-    /// <inheritdoc />
-    public IDialogPresenter Dialog => dialog;
-
-    /// <inheritdoc />
-    public IStackPresenter Content => content;
-
-    #endregion
-
     #region Methods
 
     /// <summary>
-    /// Start the app on the first page.
+    /// Navigate to the previous page.
     /// </summary>
-    protected override void OnCreated()
+    public void PreviousPage()
     {
-        Content.Push<FirstPageViewModel>();
+        mainViewModel.Content.Pop();
     }
 
     #endregion

@@ -87,8 +87,8 @@ public partial class AnimatedContent : TemplatedView
         if (view is not null)
         {
             view.CancelAnimations();
-            resolvedEnterAnimation.Initialize(view);
             _layout.Children.Add(view);
+            resolvedEnterAnimation.Initialize(view);
         }
 
         var exitTask = exitingView is not null ?

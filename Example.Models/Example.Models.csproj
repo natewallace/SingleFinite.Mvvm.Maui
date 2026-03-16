@@ -8,11 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SingleFinite.Mvvm" Version="0.0.36" />
+    <PackageReference Include="SingleFinite.Mvvm" Version="0.0.37" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
