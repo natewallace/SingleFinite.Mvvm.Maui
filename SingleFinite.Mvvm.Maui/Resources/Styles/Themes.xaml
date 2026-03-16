@@ -52,7 +52,7 @@
 
     <Style TargetType="local:DialogViewPresenter">
         <Setter Property="ScrimBackgroundColor" Value="#84888480" />
-        <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=#1f1f1f}" />
+        <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=Black}" />
         <Setter Property="DialogShape" Value="RoundRectangle 4" />
         <Setter Property="DialogShadow" Value="4 4 16 Black 0.5" />
         <Setter Property="ControlTemplate">
