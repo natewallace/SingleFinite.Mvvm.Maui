@@ -19,27 +19,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using SingleFinite.Mvvm;
-
-namespace Example.Models.Pages;
+namespace SingleFinite.Mvvm.Maui;
 
 /// <summary>
-/// The second page of the example.
+/// A rectangle that has double type values.
 /// </summary>
-/// <param name="mainViewModel">The main view model.</param>
-public class SecondPageViewModel(
-    IMainViewModel mainViewModel
-) : ViewModel
-{
-    #region Methods
-
-    /// <summary>
-    /// Navigate to the previous page.
-    /// </summary>
-    public void Back()
-    {
-        mainViewModel.Content.Pop();
-    }
-
-    #endregion
-}
+/// <param name="VisualElementX">The X coordinate of the visual element.</param>
+/// <param name="VisualElementY">The Y coordinate of the visual element.</param>
+/// <param name="VisualElementWidth">The width of the visual element.</param>
+/// <param name="VisualElementHeight">The height of the visual element.</param>
+/// <param name="WindowWidth">The height of the window.</param>
+/// <param name="WindowHeight">The height of the window.</param>
+public record WindowRelativeLocation(
+    double VisualElementX,
+    double VisualElementY,
+    double VisualElementWidth,
+    double VisualElementHeight,
+    double WindowWidth,
+    double WindowHeight
+);

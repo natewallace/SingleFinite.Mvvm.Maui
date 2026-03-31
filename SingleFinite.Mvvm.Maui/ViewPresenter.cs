@@ -50,8 +50,8 @@ public partial class ViewPresenter : TemplatedView
     /// </summary>
     public ViewPresenter()
     {
-        Loaded += (_, _) => Subscribe();
-        Unloaded += (_, _) => Unsubscribe();
+        Loaded += (_, _) => SubscribeToPresenter();
+        Unloaded += (_, _) => UnsubscribeFromPresenter();
     }
 
     #endregion
@@ -69,11 +69,11 @@ public partial class ViewPresenter : TemplatedView
             if (field == value)
                 return;
 
-            Unsubscribe();
+            UnsubscribeFromPresenter();
 
             field = value;
 
-            Subscribe();
+            SubscribeToPresenter();
         }
     }
 
@@ -119,7 +119,7 @@ public partial class ViewPresenter : TemplatedView
     /// <summary>
     /// Observe changes to the current view of the presenter.
     /// </summary>
-    private void Subscribe()
+    private void SubscribeToPresenter()
     {
         if (_sourceViewObserver is not null)
             return;
@@ -142,7 +142,7 @@ public partial class ViewPresenter : TemplatedView
     /// <summary>
     /// Stop observing changes to the current view of the presenter.
     /// </summary>
-    private void Unsubscribe()
+    private void UnsubscribeFromPresenter()
     {
         _sourceViewObserver?.Dispose();
         _sourceViewObserver = null;

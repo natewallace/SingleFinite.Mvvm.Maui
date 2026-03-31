@@ -28,7 +28,7 @@ namespace Example.App.Views.Pages;
 /// <summary>
 /// The view for the first page.
 /// </summary>
-public partial class SecondPageView : ContentView, IView<SecondPageViewModel>
+public partial class SecondPageView : ContentPage, IView<SecondPageViewModel>
 {
     #region Constructors
 
@@ -40,44 +40,17 @@ public partial class SecondPageView : ContentView, IView<SecondPageViewModel>
     {
         ViewModel = viewModel;
 
-        Content = new Grid().Also(mainGrid =>
+        Content = new TemplatePageView().Also(contentTemplateView =>
         {
-            mainGrid.RowDefinitions = [
-                new RowDefinition { Height = GridLength.Star },
-                new RowDefinition { Height = GridLength.Auto }
-            ];
-
-            mainGrid.Children.Add(
-                new Label().Also(label =>
-                {
-                    Grid.SetRow(label, 0);
-                    label.HorizontalOptions = LayoutOptions.Center;
-                    label.VerticalOptions = LayoutOptions.Center;
-                    label.Text = "This is the second page.";
-                })
-            );
-
-            mainGrid.Children.Add(
-                new Grid().Also(bottomBarGrid =>
-                {
-                    bottomBarGrid.ColumnDefinitions = [
-                        new ColumnDefinition { Width = GridLength.Star },
-                        new ColumnDefinition { Width = GridLength.Auto }
-                    ];
-
-                    Grid.SetRow(bottomBarGrid, 1);
-                    bottomBarGrid.HorizontalOptions = LayoutOptions.Start;
-                    bottomBarGrid.Padding = 24;
-                    bottomBarGrid.Children.Add(
-                        new Button().Also(nextPageButton =>
-                        {
-                            Grid.SetColumn(nextPageButton, 1);
-                            nextPageButton.Text = "Back";
-                            nextPageButton.Clicked += (_, _) => ViewModel.PreviousPage();
-                        })
-                    );
-                })
-            );
+            contentTemplateView.Title = "Application setup";
+            contentTemplateView.Content = new Label().Also(label =>
+            {
+                Grid.SetRow(label, 0);
+                label.HorizontalOptions = LayoutOptions.Center;
+                label.VerticalOptions = LayoutOptions.Center;
+                label.Text = "This is the second page.";
+            });
+            contentTemplateView.OnBack = ViewModel.Back;
         });
     }
 

@@ -19,27 +19,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Example.Models.Services;
+using SingleFinite.Essentials;
 using SingleFinite.Mvvm;
 
-namespace Example.Models.Pages;
+namespace Example.Models;
 
-/// <summary>
-/// The first page of the example.
-/// </summary>
-/// <param name="mainViewModel">The main view model.</param>
-public class FirstPageViewModel(
-    IMainViewModel mainViewModel
-) : ViewModel
+public class SettingsViewModel(IAppThemeManager appThemeManager) :
+    ViewModel,
+    ICloseObservable
 {
-    #region Methods
-
-    /// <summary>
-    /// Navigate to the next page.
-    /// </summary>
-    public void NextPage()
+    public AppTheme CurrentAppTheme
     {
-        mainViewModel.Content.Push<SecondPageViewModel>();
+        get;
+        set => ChangeProperty(
+            field: ref field,
+            value: value,
+            onPropertyChanged: () => appThemeManager.Current = value
+        );
     }
 
-    #endregion
+    public void Close() => _closedSource.Emit(this);
+
+    protected override void OnCreated()
+    {
+        CurrentAppTheme = appThemeManager.Current;
+    }
+
+    protected override void OnActivate(CancellationToken cancellationToken)
+    {
+        appThemeManager.CurrentChanged
+            .Observe()
+            .OnEach(appTheme => CurrentAppTheme = appTheme)
+            .Until(cancellationToken);
+    }
+
+    private EventObservableSource<ICloseObservable> _closedSource = new();
+    public IEventObservable<ICloseObservable> Closed => _closedSource.Observable;
 }

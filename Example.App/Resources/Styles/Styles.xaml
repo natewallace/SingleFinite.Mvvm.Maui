@@ -10,7 +10,7 @@
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
     </Style>
 
-    <Style TargetType="singleFinite:DialogViewPresenter">
+    <Style TargetType="singleFinite:DialogViewPresenter" BasedOn="{StaticResource DefaultDialogViewPresenterStyle}">
         <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
     </Style>
 

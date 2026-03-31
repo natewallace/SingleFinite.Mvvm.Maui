@@ -46,5 +46,48 @@ public static class VisualElementExtensions
 
             return (TResource)Application.Current.ThrowIfNull().Resources[key];
         }
+
+        /// <summary>
+        /// Get the current location of the VisualElement relative to the
+        /// window.
+        /// </summary>
+        /// <returns>
+        /// The current location of the VisualElement relative to the window.
+        /// </returns>
+        public WindowRelativeLocation GetWindowRelativeLocation()
+        {
+            var x = 0.0;
+            var y = 0.0;
+            var width = 0.0;
+            var height = 0.0;
+            var current = visual;
+
+            Thickness? margin = null;
+
+            while (current is not null)
+            {
+                x += current.X;
+                y += current.Y;
+                width = current.Width;
+                height = current.Height;
+                margin = (current as View)?.Margin;
+                current = current.Parent as VisualElement;
+            }
+
+            if (current?.Parent is Window window)
+            {
+                width = window.Width;
+                height = window.Height;
+            }
+
+            return new WindowRelativeLocation(
+                VisualElementX: x,
+                VisualElementY: y,
+                VisualElementWidth: visual.Width,
+                VisualElementHeight: visual.Height,
+                WindowWidth: width,
+                WindowHeight: height
+            );
+        }
     }
 }

@@ -4,7 +4,7 @@
              xmlns:local="using:SingleFinite.Mvvm.Maui"
              x:Class="SingleFinite.Mvvm.Maui.Resources.Themes">
 
-    <Style TargetType="local:AnimatedContent">
+    <Style x:Key="DefaultAnimatedContentStyle" TargetType="local:AnimatedContent">
         <Setter Property="ControlTemplate">
             <ControlTemplate>
                 <ContentPresenter
@@ -25,8 +25,9 @@
             </ControlTemplate>
         </Setter>
     </Style>
-    
-    <Style TargetType="local:ViewPresenter">
+    <Style TargetType="local:AnimatedContent" BasedOn="{StaticResource DefaultAnimatedContentStyle}" />
+
+    <Style x:Key="DefaultViewPresenterStyle" TargetType="local:ViewPresenter">
         <Setter Property="IsClippedToBounds" Value="True" />
         <Setter Property="ControlTemplate">
             <ControlTemplate>
@@ -49,12 +50,13 @@
             </ControlTemplate>
         </Setter>
     </Style>
+    <Style TargetType="local:ViewPresenter" BasedOn="{StaticResource DefaultViewPresenterStyle}" />
 
-    <Style TargetType="local:DialogViewPresenter">
+    <Style x:Key="DefaultDialogViewPresenterStyle" TargetType="local:DialogViewPresenter">
         <Setter Property="ScrimBackgroundColor" Value="#84888480" />
         <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=Black}" />
         <Setter Property="DialogShape" Value="RoundRectangle 4" />
-        <Setter Property="DialogShadow" Value="4 4 16 Black 0.5" />
+        <Setter Property="DialogShadow" Value="-6 6 12 Black 0.5" />
         <Setter Property="ControlTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -71,8 +73,9 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style TargetType="local:DialogViewPresenter" BasedOn="{StaticResource DefaultDialogViewPresenterStyle}" />
 
-    <Style TargetType="local:Dialog">
+    <Style x:Key="DefaultDialogStyle" TargetType="local:Dialog">
         <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=#1f1f1f}" />
         <Setter Property="DialogShape" Value="RoundRectangle 4" />
         <Setter Property="DialogShadow" Value="4 4 16 Black 0.5" />
@@ -94,5 +97,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style TargetType="local:Dialog" BasedOn="{StaticResource DefaultDialogStyle}" />
 
 </ResourceDictionary>

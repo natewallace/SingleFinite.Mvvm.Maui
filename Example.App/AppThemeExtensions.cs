@@ -19,65 +19,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Example.Models.Pages;
-using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services.Presenters;
-
-namespace Example.Models;
+namespace Example.App;
 
 /// <summary>
-/// Interface for the main view model.
+/// AppTheme extension members.
 /// </summary>
-public interface IMainViewModel
+internal static class AppThemeExtensions
 {
     /// <summary>
-    /// The dialog presenter for the app.
+    /// Convert a MAUI AppTheme to a Models AppTheme.
     /// </summary>
-    IDialogPresenter Dialog { get; }
-
-    /// <summary>
-    /// The content for the app.
-    /// </summary>
-    IStackPresenter Content { get; }
-}
-
-/// <summary>
-/// The main view model.
-/// </summary>
-/// <param name="dialog">Dialog presenter.</param>
-/// <param name="content">Content presenter.</param>
-public partial class MainViewModel(
-    IDialogPresenter dialog,
-    IStackPresenter content
-) : ViewModel, IMainViewModel
-{
-    #region Properties
-
-    /// <inheritdoc />
-    public IDialogPresenter Dialog => dialog;
-
-    /// <inheritdoc />
-    public IStackPresenter Content => content;
-
-    #endregion
-
-    #region Methods
-
-    /// <summary>
-    /// Start the app on the first page.
-    /// </summary>
-    protected override void OnCreated()
+    /// <param name="theme">The theme to convert.</param>
+    /// <returns>The converted theme.</returns>
+    public static AppTheme ToMauiAppTheme(this Models.AppTheme theme) => theme switch
     {
-        Content.Push<OverviewPageModel>();
-    }
+        Models.AppTheme.Light => AppTheme.Light,
+        Models.AppTheme.Dark => AppTheme.Dark,
+        _ => AppTheme.Unspecified
+    };
 
     /// <summary>
-    /// Show the settings view.
+    /// Convert a Models AppTheme to a MAUI AppTheme.
     /// </summary>
-    public void ShowSettings()
+    /// <param name="theme">The theme to convert.</param>
+    /// <returns>The converted theme.</returns>
+    public static Models.AppTheme ToModelsAppTheme(this AppTheme theme) => theme switch
     {
-        Dialog.Show<SettingsViewModel>();
-    }
-
-    #endregion
+        AppTheme.Light => Models.AppTheme.Light,
+        AppTheme.Dark => Models.AppTheme.Dark,
+        _ => Models.AppTheme.System
+    };
 }

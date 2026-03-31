@@ -19,27 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using SingleFinite.Mvvm;
+using Example.Models.Services;
+using SingleFinite.Essentials;
 
-namespace Example.Models.Pages;
+namespace Example.App.Services;
 
-/// <summary>
-/// The second page of the example.
-/// </summary>
-/// <param name="mainViewModel">The main view model.</param>
-public class SecondPageViewModel(
-    IMainViewModel mainViewModel
-) : ViewModel
+internal class AppThemeManager : IAppThemeManager
 {
-    #region Methods
+    #region Properties
 
-    /// <summary>
-    /// Navigate to the previous page.
-    /// </summary>
-    public void Back()
+    public Models.AppTheme Current
     {
-        mainViewModel.Content.Pop();
+        get => Application.Current?.UserAppTheme.ToModelsAppTheme() ?? Models.AppTheme.System;
+        set
+        {
+            var currentApp = Application.Current;
+            if (currentApp is null) return;
+
+            var appTheme = value.ToMauiAppTheme();
+            if (appTheme == currentApp.UserAppTheme) return;
+
+            currentApp.UserAppTheme = appTheme;
+            _currentChangedSource.Emit(value);
+        }
     }
+
+    #endregion
+
+    #region Events
+
+    private readonly EventObservableSource<Models.AppTheme> _currentChangedSource = new();
+    public IEventObservable<Models.AppTheme> CurrentChanged => _currentChangedSource.Observable;
 
     #endregion
 }

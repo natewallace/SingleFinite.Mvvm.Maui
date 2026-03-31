@@ -19,65 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Example.Models.Pages;
-using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services.Presenters;
-
 namespace Example.Models;
 
 /// <summary>
-/// Interface for the main view model.
+/// The possible app theme settings.
 /// </summary>
-public interface IMainViewModel
+public enum AppTheme
 {
     /// <summary>
-    /// The dialog presenter for the app.
+    /// The app theme defined for the system.
     /// </summary>
-    IDialogPresenter Dialog { get; }
+    System,
 
     /// <summary>
-    /// The content for the app.
+    /// The light app theme.
     /// </summary>
-    IStackPresenter Content { get; }
-}
-
-/// <summary>
-/// The main view model.
-/// </summary>
-/// <param name="dialog">Dialog presenter.</param>
-/// <param name="content">Content presenter.</param>
-public partial class MainViewModel(
-    IDialogPresenter dialog,
-    IStackPresenter content
-) : ViewModel, IMainViewModel
-{
-    #region Properties
-
-    /// <inheritdoc />
-    public IDialogPresenter Dialog => dialog;
-
-    /// <inheritdoc />
-    public IStackPresenter Content => content;
-
-    #endregion
-
-    #region Methods
+    Light,
 
     /// <summary>
-    /// Start the app on the first page.
+    /// The dark app theme.
     /// </summary>
-    protected override void OnCreated()
-    {
-        Content.Push<OverviewPageModel>();
-    }
-
-    /// <summary>
-    /// Show the settings view.
-    /// </summary>
-    public void ShowSettings()
-    {
-        Dialog.Show<SettingsViewModel>();
-    }
-
-    #endregion
+    Dark
 }

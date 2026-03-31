@@ -90,6 +90,33 @@ public partial class DialogViewPresenter : TemplatedView
         );
 
     /// <summary>
+    /// Key for IsDialogOpenProperty.
+    /// </summary>
+    private static readonly BindablePropertyKey s_isDialogOpenPropertyKey =
+        BindableProperty.CreateReadOnly(
+            propertyName: nameof(IsDialogOpen),
+            returnType: typeof(bool),
+            declaringType: typeof(DialogViewPresenter),
+            defaultValue: false,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                if (bindable is DialogViewPresenter presenter)
+                {
+                    presenter.IsDialogOpenChanged?.Invoke(
+                        sender: presenter,
+                        e: (bool)newValue
+                    );
+                }
+            }
+        );
+
+    /// <summary>
+    /// Indicates if a dialog is currently open.
+    /// </summary>
+    public static readonly BindableProperty IsDialogOpenProperty =
+        s_isDialogOpenPropertyKey.BindableProperty;
+
+    /// <summary>
     /// The controls read in from the control template.  This will be null until
     /// the template has been applied.
     /// </summary>
@@ -109,8 +136,16 @@ public partial class DialogViewPresenter : TemplatedView
     /// </summary>
     public DialogViewPresenter()
     {
-        Loaded += (_, _) => Subscribe();
-        Unloaded += (_, _) => Unsubscribe();
+        Loaded += (_, _) =>
+        {
+            if (!IsSubscribeManaged)
+                SubscribeToPresenter();
+        };
+        Unloaded += (_, _) =>
+        {
+            if (!IsSubscribeManaged)
+                UnsubscribeFromPresenter();
+        };
     }
 
     #endregion
@@ -214,6 +249,22 @@ public partial class DialogViewPresenter : TemplatedView
     }
 
     /// <summary>
+    /// Indicates if a dialog is currently open.
+    /// </summary>
+    public bool IsDialogOpen
+    {
+        get => (bool)GetValue(IsDialogOpenProperty);
+        private set => SetValue(s_isDialogOpenPropertyKey, value);
+    }
+
+    /// <summary>
+    /// When set to true the Subscribe and Unsubscribe methods will be called
+    /// by an external control instead of when this control is loaded and
+    /// unloaded.
+    /// </summary>
+    internal bool IsSubscribeManaged { get; set; } = false;
+
+    /// <summary>
     /// The presenter whose views will be displayed in this control.
     /// </summary>
     public IPresenter? Source
@@ -224,11 +275,11 @@ public partial class DialogViewPresenter : TemplatedView
             if (field == value)
                 return;
 
-            Unsubscribe();
+            UnsubscribeFromPresenter();
 
             field = value;
 
-            Subscribe();
+            SubscribeToPresenter();
         }
     }
 
@@ -259,7 +310,7 @@ public partial class DialogViewPresenter : TemplatedView
         base.OnApplyTemplate();
 
         _templateControls = new(
-            Root: GetTemplateControl<VisualElement>("Root"),
+            Root: GetTemplateControl<View>("Root"),
             Scrim: GetTemplateControl<View>("Scrim"),
             ContentPresenter: GetTemplateControl<AnimatedContent>("ContentPresenter")
         );
@@ -288,7 +339,7 @@ public partial class DialogViewPresenter : TemplatedView
     /// <summary>
     /// Start observing changes to the current view of the presenter.
     /// </summary>
-    private void Subscribe()
+    internal void SubscribeToPresenter()
     {
         if (_sourceViewObserver is not null)
             return;
@@ -311,7 +362,7 @@ public partial class DialogViewPresenter : TemplatedView
     /// <summary>
     /// Stop observing changes to the current view of the presenter.
     /// </summary>
-    private void Unsubscribe()
+    internal void UnsubscribeFromPresenter()
     {
         _sourceViewObserver?.Dispose();
         _sourceViewObserver = null;
@@ -348,6 +399,7 @@ public partial class DialogViewPresenter : TemplatedView
                 ScrimEnterAnimation.Initialize(_templateControls.Scrim);
 
                 _templateControls.Root.IsVisible = true;
+                IsDialogOpen = true;
 
                 tasks.Add(ScrimEnterAnimation.RunAsync(_templateControls.Scrim));
                 tasks.Add(
@@ -376,6 +428,7 @@ public partial class DialogViewPresenter : TemplatedView
                 await Task.WhenAll(tasks);
 
                 _templateControls.Root.IsVisible = false;
+                IsDialogOpen = false;
             }
             else if (dialog is not null)
             {
@@ -399,6 +452,11 @@ public partial class DialogViewPresenter : TemplatedView
     /// </summary>
     public event EventHandler? DismissRequested;
 
+    /// <summary>
+    /// Event raised when the IsDialogOpen property changes.
+    /// </summary>
+    public event EventHandler<bool>? IsDialogOpenChanged;
+
     #endregion
 
     #region Types
@@ -410,7 +468,7 @@ public partial class DialogViewPresenter : TemplatedView
     /// <param name="Scrim">The scrim control.</param>
     /// <param name="ContentPresenter">The content presenter.</param>
     private record TemplateControls(
-        VisualElement Root,
+        View Root,
         View Scrim,
         AnimatedContent ContentPresenter
     );

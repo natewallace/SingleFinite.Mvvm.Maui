@@ -1,4 +1,6 @@
-﻿using Example.Models;
+﻿using CommunityToolkit.Maui.Markup;
+using Example.Models;
+using Fonts;
 using SingleFinite.Essentials;
 using SingleFinite.Mvvm;
 using SingleFinite.Mvvm.Maui;
@@ -20,31 +22,48 @@ public partial class MainWindow : Window, IView<MainViewModel>
     {
         ViewModel = viewModel;
 
-        Page = new ContentPage().Also(page =>
-            page.Content = new Grid().Also(grid =>
+        Page = new NavigationPage
+        (
+            root: new ContentPage
             {
-                grid.Children.Add(
-                    new ViewPresenter().Also(content =>
+                ToolbarItems =
+                {
+                    new ToolbarItem
                     {
-                        content.Source = ViewModel.Content;
-                        content.EnterForwardAnimation = IViewAnimation.SlideIn(
-                            direction: SlideDirection.EndToStart
-                        );
-                        content.EnterBackwardAnimation = IViewAnimation.SlideIn(
-                            direction: SlideDirection.StartToEnd
-                        );
-                        content.ExitForwardAnimation = IViewAnimation.None();
-                        content.ExitBackwardAnimation = IViewAnimation.None();
-                    })
-                );
+                        IconImageSource = new FontImageSource
+                        {
+                            FontFamily = FluentUI.FontFamily,
+                            Glyph = FluentUI.settings_24_regular
+                        }
+                    }.Also(it => it.Clicked += (_, _) => ViewModel.ShowSettings())
+                },
 
-                grid.Children.Add(
-                    new DialogViewPresenter().Also(dialog =>
-                    {
-                        dialog.Source = ViewModel.Dialog;
-                    })
-                );
-            })
+                Content = new Grid
+                {
+                    new ViewPresenter()
+                        .Source(ViewModel.Content)
+                        .EnterForwardAnimation(
+                            IViewAnimation.SlideIn(
+                                direction: SlideDirection.EndToStart
+                            )
+                        )
+                        .EnterBackwardAnimation(
+                            IViewAnimation.SlideIn(
+                                direction: SlideDirection.StartToEnd
+                            )
+                        )
+                        .ExitForwardAnimation(IViewAnimation.None())
+                        .ExitBackwardAnimation(IViewAnimation.None())
+                }
+            }
+        ).DialogPage(
+            new DialogViewPresenterPage
+            {
+                DialogViewPresenter = new DialogViewPresenter
+                {
+                    Source = ViewModel.Dialog
+                }
+            }
         );
     }
 

@@ -21,63 +21,45 @@
 
 using Example.Models.Pages;
 using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services.Presenters;
 
-namespace Example.Models;
-
-/// <summary>
-/// Interface for the main view model.
-/// </summary>
-public interface IMainViewModel
-{
-    /// <summary>
-    /// The dialog presenter for the app.
-    /// </summary>
-    IDialogPresenter Dialog { get; }
-
-    /// <summary>
-    /// The content for the app.
-    /// </summary>
-    IStackPresenter Content { get; }
-}
+namespace Example.App.Views.Pages;
 
 /// <summary>
-/// The main view model.
+/// The view for the first page.
 /// </summary>
-/// <param name="dialog">Dialog presenter.</param>
-/// <param name="content">Content presenter.</param>
-public partial class MainViewModel(
-    IDialogPresenter dialog,
-    IStackPresenter content
-) : ViewModel, IMainViewModel
+public partial class OverviewPageView : ContentView, IView<OverviewPageModel>
 {
-    #region Properties
+    #region Constructors
 
-    /// <inheritdoc />
-    public IDialogPresenter Dialog => dialog;
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="viewModel">The view model for this view.</param>
+    public OverviewPageView(OverviewPageModel viewModel)
+    {
+        ViewModel = viewModel;
 
-    /// <inheritdoc />
-    public IStackPresenter Content => content;
+        Content = new TemplatePageView
+        {
+            Title = "Overview",
+            Content = new Label
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                Text = "This is the first page."
+            },
+            OnNext = ViewModel.Next
+        };
+    }
 
     #endregion
 
-    #region Methods
+    #region Properties
 
     /// <summary>
-    /// Start the app on the first page.
+    /// The view model for this view.
     /// </summary>
-    protected override void OnCreated()
-    {
-        Content.Push<OverviewPageModel>();
-    }
-
-    /// <summary>
-    /// Show the settings view.
-    /// </summary>
-    public void ShowSettings()
-    {
-        Dialog.Show<SettingsViewModel>();
-    }
+    public OverviewPageModel ViewModel { get; }
 
     #endregion
 }

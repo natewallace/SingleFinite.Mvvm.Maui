@@ -19,65 +19,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Example.Models.Pages;
-using SingleFinite.Mvvm;
-using SingleFinite.Mvvm.Services.Presenters;
+using SingleFinite.Essentials;
 
-namespace Example.Models;
+namespace Example.Models.Services;
 
 /// <summary>
-/// Interface for the main view model.
+/// Service for getting or setting the current app theme.
 /// </summary>
-public interface IMainViewModel
+public interface IAppThemeManager
 {
     /// <summary>
-    /// The dialog presenter for the app.
+    /// The current app theme.
     /// </summary>
-    IDialogPresenter Dialog { get; }
+    AppTheme Current { get; set; }
 
     /// <summary>
-    /// The content for the app.
+    /// Emits when the current app theme is changed.
     /// </summary>
-    IStackPresenter Content { get; }
-}
-
-/// <summary>
-/// The main view model.
-/// </summary>
-/// <param name="dialog">Dialog presenter.</param>
-/// <param name="content">Content presenter.</param>
-public partial class MainViewModel(
-    IDialogPresenter dialog,
-    IStackPresenter content
-) : ViewModel, IMainViewModel
-{
-    #region Properties
-
-    /// <inheritdoc />
-    public IDialogPresenter Dialog => dialog;
-
-    /// <inheritdoc />
-    public IStackPresenter Content => content;
-
-    #endregion
-
-    #region Methods
-
-    /// <summary>
-    /// Start the app on the first page.
-    /// </summary>
-    protected override void OnCreated()
-    {
-        Content.Push<OverviewPageModel>();
-    }
-
-    /// <summary>
-    /// Show the settings view.
-    /// </summary>
-    public void ShowSettings()
-    {
-        Dialog.Show<SettingsViewModel>();
-    }
-
-    #endregion
+    IEventObservable<AppTheme> CurrentChanged { get; }
 }
