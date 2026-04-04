@@ -28,7 +28,7 @@ namespace Example.App.Views.Pages;
 /// <summary>
 /// The view for the first page.
 /// </summary>
-public partial class SecondPageView : ContentPage, IView<SecondPageViewModel>
+public partial class SecondPageView : ContentView, IView<SecondPageViewModel>
 {
     #region Constructors
 

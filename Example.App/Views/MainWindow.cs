@@ -34,26 +34,20 @@ public partial class MainWindow : Window, IView<MainViewModel>
                         {
                             FontFamily = FluentUI.FontFamily,
                             Glyph = FluentUI.settings_24_regular
+                        },
+                        Apply = it =>
+                        {
+                            it.Clicked += (_, _) => ViewModel.ShowSettings();
                         }
-                    }.Also(it => it.Clicked += (_, _) => ViewModel.ShowSettings())
+                    }
                 },
 
                 Content = new Grid
                 {
-                    new ViewPresenter()
-                        .Source(ViewModel.Content)
-                        .EnterForwardAnimation(
-                            IViewAnimation.SlideIn(
-                                direction: SlideDirection.EndToStart
-                            )
-                        )
-                        .EnterBackwardAnimation(
-                            IViewAnimation.SlideIn(
-                                direction: SlideDirection.StartToEnd
-                            )
-                        )
-                        .ExitForwardAnimation(IViewAnimation.None())
-                        .ExitBackwardAnimation(IViewAnimation.None())
+                    new ViewPresenter
+                    {
+                        Source = ViewModel.Content
+                    }
                 }
             }
         ).DialogPage(

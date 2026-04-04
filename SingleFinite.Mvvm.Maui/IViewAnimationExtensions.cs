@@ -67,7 +67,7 @@ public static class IViewAnimationExtensions
         /// </param>
         /// <param name="easing">
         /// The easing function to use for the animation.  If not specified the
-        /// Easing.SinIn function is used.
+        /// Linear easing is used.
         /// </param>
         /// <returns>A ViewAnimation that fades a view in.</returns>
         public static IViewAnimation FadeIn(
@@ -78,7 +78,7 @@ public static class IViewAnimationExtensions
             runAsync: view => view.FadeToAsync(
                 opacity: 1.0,
                 length: duration,
-                easing: easing ?? Easing.SinIn
+                easing: easing ?? Easing.Linear
             )
         );
 
@@ -90,7 +90,7 @@ public static class IViewAnimationExtensions
         /// </param>
         /// <param name="easing">
         /// The easing function to use for the animation.  If not specified the
-        /// Easing.SinOut function is used.
+        /// Linear easing is used.
         /// </param>
         /// <returns>A ViewAnimation that fades a view out.</returns>
         public static IViewAnimation FadeOut(
@@ -100,7 +100,7 @@ public static class IViewAnimationExtensions
             runAsync: view => view.FadeToAsync(
                 opacity: 0.0,
                 length: duration,
-                easing: easing ?? Easing.SinOut
+                easing: easing ?? Easing.Linear
             )
         );
 
@@ -123,7 +123,7 @@ public static class IViewAnimationExtensions
             runAsync: view => view.ScaleToAsync(
                 scale: 1.0,
                 length: duration,
-                easing: easing ?? Easing.SinIn
+                easing: easing ?? Easing.Linear
             )
         );
 
@@ -135,7 +135,7 @@ public static class IViewAnimationExtensions
         /// </param>
         /// <param name="easing">
         /// The easing function to use for the animation.  If not specified the
-        /// Easing.SinIn function is used.
+        /// Linear easing  is used.
         /// </param>
         /// <returns>A ViewAnimation that scales a view out.</returns>
         public static IViewAnimation ScaleOut(
@@ -145,7 +145,7 @@ public static class IViewAnimationExtensions
             runAsync: view => view.ScaleToAsync(
                 scale: 0.0,
                 length: duration,
-                easing: easing ?? Easing.SinOut
+                easing: easing ?? Easing.Linear
             )
         );
 
@@ -159,7 +159,7 @@ public static class IViewAnimationExtensions
         /// </param>
         /// <param name="easing">
         /// The easing function to use for the animation.  If not specified the
-        /// Easing.Linear function is used.
+        /// Linear easing is used.
         /// </param>
         /// <returns>
         /// A ViewAnimation that translates the view position.
@@ -187,7 +187,7 @@ public static class IViewAnimationExtensions
         /// </param>
         /// <param name="easing">
         /// The easing function to use for the animation.  If not specified the
-        /// Easing.Linear function is used.
+        /// Linear easing is used.
         /// </param>
         /// <returns>
         /// A ViewAnimation that slides a view into the screen.
@@ -236,7 +236,7 @@ public static class IViewAnimationExtensions
         /// </param>
         /// <param name="easing">
         /// The easing function to use for the animation.  If not specified the
-        /// Easing.Linear function is used.
+        /// Linear easing is used.
         /// </param>
         /// <returns>
         /// A ViewAnimation that slides a view out of the screen.

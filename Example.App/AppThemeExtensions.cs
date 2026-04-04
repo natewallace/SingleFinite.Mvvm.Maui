@@ -31,12 +31,12 @@ internal static class AppThemeExtensions
     /// </summary>
     /// <param name="theme">The theme to convert.</param>
     /// <returns>The converted theme.</returns>
-    public static AppTheme ToMauiAppTheme(this Models.AppTheme theme) => theme switch
-    {
-        Models.AppTheme.Light => AppTheme.Light,
-        Models.AppTheme.Dark => AppTheme.Dark,
-        _ => AppTheme.Unspecified
-    };
+    public static AppTheme ToMauiAppTheme(this Models.AppTheme theme) =>
+        theme.Convert(
+            system: AppTheme.Unspecified,
+            light: AppTheme.Light,
+            dark: AppTheme.Dark
+        );
 
     /// <summary>
     /// Convert a Models AppTheme to a MAUI AppTheme.

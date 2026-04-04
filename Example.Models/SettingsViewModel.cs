@@ -25,27 +25,50 @@ using SingleFinite.Mvvm;
 
 namespace Example.Models;
 
+/// <summary>
+/// The view model for settings.
+/// </summary>
+/// <param name="appThemeManager">App theme manager service.</param>
 public class SettingsViewModel(IAppThemeManager appThemeManager) :
     ViewModel,
     ICloseObservable
 {
-    public AppTheme CurrentAppTheme
+    #region Properties
+
+    /// <summary>
+    /// The current app theme.
+    /// </summary>
+    public AppTheme? CurrentAppTheme
     {
         get;
         set => ChangeProperty(
             field: ref field,
             value: value,
-            onPropertyChanged: () => appThemeManager.Current = value
+            onPropertyChanged: () => appThemeManager.Current = value ?? AppTheme.System
         );
     }
 
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Close the settings dialog.
+    /// </summary>
     public void Close() => _closedSource.Emit(this);
 
+    /// <summary>
+    /// Set initial values.
+    /// </summary>
     protected override void OnCreated()
     {
         CurrentAppTheme = appThemeManager.Current;
     }
 
+    /// <summary>
+    /// Attach observers.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token to use.</param>
     protected override void OnActivate(CancellationToken cancellationToken)
     {
         appThemeManager.CurrentChanged
@@ -54,6 +77,15 @@ public class SettingsViewModel(IAppThemeManager appThemeManager) :
             .Until(cancellationToken);
     }
 
-    private EventObservableSource<ICloseObservable> _closedSource = new();
+    #endregion
+
+    #region Events
+
+    /// <summary>
+    /// Emits when a request has been made to close the settings dialog.
+    /// </summary>
     public IEventObservable<ICloseObservable> Closed => _closedSource.Observable;
+    private readonly EventObservableSource<ICloseObservable> _closedSource = new();
+
+    #endregion
 }

@@ -24,20 +24,91 @@ namespace Example.Models;
 /// <summary>
 /// The possible app theme settings.
 /// </summary>
-public enum AppTheme
+public class AppTheme
 {
+    #region Fields
+
+    /// <summary>
+    /// Holds the name of the app theme.
+    /// </summary>
+    private readonly string _name;
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="name">The name of the app theme.</param>
+    private AppTheme(string name)
+    {
+        _name = name;
+    }
+
+    #endregion
+
+    #region Properties
+
     /// <summary>
     /// The app theme defined for the system.
     /// </summary>
-    System,
+    public readonly static AppTheme System = new("System");
 
     /// <summary>
     /// The light app theme.
     /// </summary>
-    Light,
+    public readonly static AppTheme Light = new("Light");
 
     /// <summary>
     /// The dark app theme.
     /// </summary>
-    Dark
+    public readonly static AppTheme Dark = new("Dark");
+
+    /// <summary>
+    /// All app themes.
+    /// </summary>
+    public readonly static AppTheme[] All =
+    [
+        System,
+        Light,
+        Dark
+    ];
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Convert this theme into an equivalent value.
+    /// </summary>
+    /// <typeparam name="TType">The type of the equivalent value.</typeparam>
+    /// <param name="system">
+    /// The value to return when the theme is System.
+    /// </param>
+    /// <param name="light">The value to return when the theme is Light.</param>
+    /// <param name="dark">The value to return when the theme is Dark.</param>
+    /// <returns>The converted value.</returns>
+    public TType Convert<TType>(
+        TType system,
+        TType light,
+        TType dark
+    )
+    {
+        if (this == System)
+            return system;
+        if (this == Light)
+            return light;
+        if (this == Dark)
+            return dark;
+        throw new InvalidOperationException($"Unknown app theme: {this}");
+    }
+
+    /// <summary>
+    /// Returns the name of the app theme.
+    /// </summary>
+    /// <returns>The name of the app theme.</returns>
+    public override string ToString() => _name;
+
+    #endregion
 }
