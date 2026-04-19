@@ -1,0 +1,25 @@
+name: Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    runs-on: macOS-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install .NET MAUI
+        shell: bash
+        run: dotnet workload install maui
+      - run: dotnet build --configuration Release SingleFinite.Mvvm.Maui
+      - name: Create the package
+        run: dotnet pack --configuration Release SingleFinite.Mvvm.Maui
+      - name: Publish the package
+        run: dotnet nuget push SingleFinite.Mvvm.Maui/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_TOKEN}}
