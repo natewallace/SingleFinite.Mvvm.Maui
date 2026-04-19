@@ -6,7 +6,7 @@
 
     <Style x:Key="DefaultAnimatedContentStyle" TargetType="local:AnimatedContent">
         <Setter Property="ControlTemplate">
-            <ControlTemplate>
+            <ControlTemplate x:DataType="local:AnimatedContent">
                 <ContentPresenter x:Name="ContentPresenter" />
             </ControlTemplate>
         </Setter>
@@ -16,7 +16,7 @@
     <Style x:Key="DefaultViewPresenterStyle" TargetType="local:ViewPresenter">
         <Setter Property="IsClippedToBounds" Value="True" />
         <Setter Property="ControlTemplate">
-            <ControlTemplate>
+            <ControlTemplate x:DataType="local:ViewPresenter">
                 <ContentPresenter x:Name="ContentPresenter" />
             </ControlTemplate>
         </Setter>
@@ -27,7 +27,7 @@
         <Setter Property="ScrimBackgroundColor" Value="#00000052" />
         <Setter Property="ControlTemplate">
             <Setter.Value>
-                <ControlTemplate>
+                <ControlTemplate x:DataType="local:DialogViewPresenter">
                     <Grid x:Name="Root" IsVisible="False">
                         <Rectangle
                             x:Name="Scrim"
@@ -48,7 +48,7 @@
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="ControlTemplate">
             <Setter.Value>
-                <ControlTemplate>
+                <ControlTemplate x:DataType="local:Dialog">
                     <Border
                         x:Name="DialogBorder"
                         StrokeShape="{TemplateBinding Shape}"
