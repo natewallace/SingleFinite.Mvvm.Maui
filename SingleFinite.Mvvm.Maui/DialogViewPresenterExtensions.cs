@@ -40,7 +40,7 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.Source = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the BackgroundColor Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
@@ -48,31 +48,15 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.ScrimBackgroundColor = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the DialogStyle Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
-        public DialogViewPresenter DialogBackgroundColor(Color value) =>
-            viewPresenter.Also(it => it.DialogBackgroundColor = value);
+        public DialogViewPresenter DialogStyle(Style value) =>
+            viewPresenter.Also(it => it.DialogStyle = value);
 
         /// <summary>
-        /// Set the  Property.
-        /// </summary>
-        /// <param name="value">The value to set.</param>
-        /// <returns>The DialogViewPresenter.</returns>
-        public DialogViewPresenter DialogShape(IShape? value) =>
-            viewPresenter.Also(it => it.DialogShape = value);
-
-        /// <summary>
-        /// Set the  Property.
-        /// </summary>
-        /// <param name="value">The value to set.</param>
-        /// <returns>The DialogViewPresenter.</returns>
-        public DialogViewPresenter DialogShadow(Shadow value) =>
-            viewPresenter.Also(it => it.DialogShadow = value);
-
-        /// <summary>
-        /// Set the  Property.
+        /// Set the ScrimEnterAnimation Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
@@ -80,7 +64,7 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.ScrimEnterAnimation = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the ScrimExitAnimation Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
@@ -88,7 +72,7 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.ScrimExitAnimation = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the FirstDialogEnterAnimation Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
@@ -96,7 +80,7 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.FirstDialogEnterAnimation = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the FirstDialogExitAnimation Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
@@ -104,7 +88,7 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.FirstDialogExitAnimation = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the DialogEnterForwardAnimation Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
@@ -112,7 +96,7 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.DialogEnterForwardAnimation = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the DialogEnterBackwardAnimation Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
@@ -120,7 +104,7 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.DialogEnterBackwardAnimation = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the DialogExitForwardAnimation Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
@@ -128,19 +112,11 @@ public static class DialogViewPresenterExtensions
             viewPresenter.Also(it => it.DialogExitForwardAnimation = value);
 
         /// <summary>
-        /// Set the  Property.
+        /// Set the DialogExitBackwardAnimation Property.
         /// </summary>
         /// <param name="value">The value to set.</param>
         /// <returns>The DialogViewPresenter.</returns>
         public DialogViewPresenter DialogExitBackwardAnimation(IViewAnimation value) =>
             viewPresenter.Also(it => it.DialogExitBackwardAnimation = value);
-
-        /// <summary>
-        /// Set the  Property.
-        /// </summary>
-        /// <param name="value">The value to set.</param>
-        /// <returns>The DialogViewPresenter.</returns>
-        public DialogViewPresenter DismissOnTouchOutsideDialog(bool value) =>
-            viewPresenter.Also(it => it.DismissOnTouchOutsideDialog = value);
     }
 }

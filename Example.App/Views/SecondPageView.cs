@@ -19,24 +19,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Example.Models.ViewModels;
+using SingleFinite.Essentials;
 using SingleFinite.Mvvm;
 
-namespace Example.Models.Pages;
+namespace Example.App.Views;
 
 /// <summary>
-/// The first page of the example.
+/// The view for the second page.
 /// </summary>
-/// <param name="mainViewModel">The main view model.</param>
-public class OverviewPageModel(
-    IMainViewModel mainViewModel
-) : ViewModel
+public partial class SecondPageView : ContentView, IView<SecondPageViewModel>
 {
-    #region Methods
+    #region Constructors
 
-    public void Next()
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="viewModel">The view model for this view.</param>
+    public SecondPageView(SecondPageViewModel viewModel)
     {
-        mainViewModel.Content.Push<SecondPageViewModel>();
+        ViewModel = viewModel;
+
+        Content = new BasePageView().Also(contentTemplateView =>
+        {
+            contentTemplateView.Title = "Second Page";
+            contentTemplateView.Content = new Label().Also(label =>
+            {
+                Grid.SetRow(label, 0);
+                label.HorizontalOptions = LayoutOptions.Center;
+                label.VerticalOptions = LayoutOptions.Center;
+                label.Text = "This is the second page.";
+            });
+            contentTemplateView.OnBack = ViewModel.Back;
+        });
     }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// The view model for this view.
+    /// </summary>
+    public SecondPageViewModel ViewModel { get; }
 
     #endregion
 }

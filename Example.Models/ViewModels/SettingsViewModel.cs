@@ -23,7 +23,7 @@ using Example.Models.Services;
 using SingleFinite.Essentials;
 using SingleFinite.Mvvm;
 
-namespace Example.Models;
+namespace Example.Models.ViewModels;
 
 /// <summary>
 /// The view model for settings.

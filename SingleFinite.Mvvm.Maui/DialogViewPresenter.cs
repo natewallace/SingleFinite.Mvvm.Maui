@@ -20,6 +20,7 @@
 // SOFTWARE.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using Microsoft.Maui.Controls.Shapes;
 using SingleFinite.Essentials;
 using SingleFinite.Mvvm.Services.Presenters;
@@ -45,48 +46,15 @@ public partial class DialogViewPresenter : TemplatedView
         );
 
     /// <summary>
-    /// The background color for the dialog.
+    /// The style to apply to the dialog objects that get created by a
+    /// DialogViewPresenter.
     /// </summary>
-    public static readonly BindableProperty DialogBackgroundColorProperty =
+    public static readonly BindableProperty DialogStyleProperty =
         BindableProperty.Create(
-            propertyName: nameof(DialogBackgroundColor),
-            returnType: typeof(Color),
+            propertyName: nameof(DialogStyle),
+            returnType: typeof(Style),
             declaringType: typeof(DialogViewPresenter),
             defaultValue: null
-        );
-
-    /// <summary>
-    /// The dialog shape.
-    /// </summary>
-    public static readonly BindableProperty DialogShapeProperty =
-        BindableProperty.Create(
-            propertyName: nameof(DialogShape),
-            returnType: typeof(IShape),
-            declaringType: typeof(DialogViewPresenter),
-            defaultValue: new Rectangle()
-        );
-
-    /// <summary>
-    /// The dialog shadow.
-    /// </summary>
-    public static readonly BindableProperty DialogShadowProperty =
-        BindableProperty.Create(
-            propertyName: nameof(DialogShadow),
-            returnType: typeof(Shadow),
-            declaringType: typeof(DialogViewPresenter),
-            defaultValue: null
-        );
-
-    /// <summary>
-    /// Enable or disable the DismissRequested event from being raised when the
-    /// user taps outside of the dialog.
-    /// </summary>
-    public static readonly BindableProperty DismissOnTouchOutsideDialogProperty =
-        BindableProperty.Create(
-            propertyName: nameof(DismissOnTouchOutsideDialog),
-            returnType: typeof(bool),
-            declaringType: typeof(DialogViewPresenter),
-            defaultValue: false
         );
 
     /// <summary>
@@ -162,32 +130,13 @@ public partial class DialogViewPresenter : TemplatedView
     }
 
     /// <summary>
-    /// The background color for the dialog.
+    /// The style to apply to the dialog objects that get created by this
+    /// control.
     /// </summary>
-    public Color DialogBackgroundColor
+    public Style? DialogStyle
     {
-        get => (Color)GetValue(DialogBackgroundColorProperty);
-        set => SetValue(DialogBackgroundColorProperty, value);
-    }
-
-    /// <summary>
-    /// The dialog shape.
-    /// </summary>
-    [TypeConverter(typeof(StrokeShapeTypeConverter))]
-    public IShape? DialogShape
-    {
-        get => (IShape)GetValue(DialogShapeProperty);
-        set => SetValue(DialogShapeProperty, value);
-    }
-
-    /// <summary>
-    /// The dialog shadow.
-    /// </summary>
-    [TypeConverter(typeof(ShadowTypeConverter))]
-    public Shadow DialogShadow
-    {
-        get => (Shadow)GetValue(DialogShadowProperty);
-        set => SetValue(DialogShadowProperty, value);
+        get => (Style)GetValue(DialogStyleProperty);
+        set => SetValue(DialogStyleProperty, value);
     }
 
     /// <summary>
@@ -237,16 +186,6 @@ public partial class DialogViewPresenter : TemplatedView
     /// </summary>
     public IViewAnimation DialogExitBackwardAnimation { get; set; } =
         IViewAnimation.FadeOut();
-
-    /// <summary>
-    /// Enable or disable the DismissRequested event from being raised when the
-    /// user taps outside of the dialog.
-    /// </summary>
-    public bool DismissOnTouchOutsideDialog
-    {
-        get => (bool)GetValue(DismissOnTouchOutsideDialogProperty);
-        set => SetValue(DismissOnTouchOutsideDialogProperty, value);
-    }
 
     /// <summary>
     /// Indicates if a dialog is currently open.
@@ -312,28 +251,8 @@ public partial class DialogViewPresenter : TemplatedView
         _templateControls = new(
             Root: GetTemplateControl<View>("Root"),
             Scrim: GetTemplateControl<View>("Scrim"),
-            ContentPresenter: GetTemplateControl<AnimatedContent>("ContentPresenter")
+            AnimatedContent: GetTemplateControl<AnimatedContent>("AnimatedContent")
         );
-
-        _templateControls.Scrim.GestureRecognizers.Add(
-            new TapGestureRecognizer()
-                .Also(gesture => gesture.Tapped += OnScrimTapped)
-        );
-    }
-
-    /// <summary>
-    /// If DismissOnTouchOutsideDialog is enabled emit the DismissRequested
-    /// event.
-    /// </summary>
-    /// <param name="sender">Object that raised the event.</param>
-    /// <param name="e">Event arguments.</param>
-    private void OnScrimTapped(object? sender, TappedEventArgs e)
-    {
-        if (DismissOnTouchOutsideDialog)
-            DismissRequested?.Invoke(
-                sender: this,
-                e: EventArgs.Empty
-            );
     }
 
     /// <summary>
@@ -387,10 +306,8 @@ public partial class DialogViewPresenter : TemplatedView
             {
                 dialog = new Dialog
                 {
-                    DialogBackgroundColor = DialogBackgroundColor,
-                    DialogShape = DialogShape,
-                    DialogShadow = DialogShadow,
-                    DialogContent = view
+                    Style = DialogStyle,
+                    Content = view
                 };
             }
 
@@ -403,7 +320,7 @@ public partial class DialogViewPresenter : TemplatedView
 
                 tasks.Add(ScrimEnterAnimation.RunAsync(_templateControls.Scrim));
                 tasks.Add(
-                    _templateControls.ContentPresenter.SetContentAsync(
+                    _templateControls.AnimatedContent.SetContentAsync(
                         view: dialog,
                         enterAnimation: FirstDialogEnterAnimation ?? DialogEnterForwardAnimation,
                         exitAnimation: DialogExitForwardAnimation
@@ -418,7 +335,7 @@ public partial class DialogViewPresenter : TemplatedView
 
                 tasks.Add(ScrimExitAnimation.RunAsync(_templateControls.Scrim));
                 tasks.Add(
-                    _templateControls.ContentPresenter.SetContentAsync(
+                    _templateControls.AnimatedContent.SetContentAsync(
                         view: dialog,
                         enterAnimation: DialogEnterBackwardAnimation,
                         exitAnimation: FirstDialogExitAnimation ?? DialogExitBackwardAnimation
@@ -432,7 +349,7 @@ public partial class DialogViewPresenter : TemplatedView
             }
             else if (dialog is not null)
             {
-                await _templateControls.ContentPresenter.SetContentAsync(
+                await _templateControls.AnimatedContent.SetContentAsync(
                     view: dialog,
                     enterAnimation: isNew ? DialogEnterForwardAnimation : DialogEnterBackwardAnimation,
                     exitAnimation: isNew ? DialogExitForwardAnimation : DialogExitBackwardAnimation
@@ -444,13 +361,6 @@ public partial class DialogViewPresenter : TemplatedView
     #endregion
 
     #region Events
-
-    /// <summary>
-    /// Event raised when the user has tapped on the are outside of the dialog.
-    /// If the DismissOnTouchOutsideDialog property is false this event will not
-    /// be raised.
-    /// </summary>
-    public event EventHandler? DismissRequested;
 
     /// <summary>
     /// Event raised when the IsDialogOpen property changes.
@@ -466,11 +376,11 @@ public partial class DialogViewPresenter : TemplatedView
     /// </summary>
     /// <param name="Root">The root level control.</param>
     /// <param name="Scrim">The scrim control.</param>
-    /// <param name="ContentPresenter">The content presenter.</param>
+    /// <param name="AnimatedContent">The content presenter.</param>
     private record TemplateControls(
         View Root,
         View Scrim,
-        AnimatedContent ContentPresenter
+        AnimatedContent AnimatedContent
     );
 
     #endregion

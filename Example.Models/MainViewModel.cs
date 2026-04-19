@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Example.Models.Pages;
+using Example.Models.ViewModels;
 using SingleFinite.Mvvm;
 using SingleFinite.Mvvm.Services.Presenters;
 
@@ -33,7 +33,7 @@ public interface IMainViewModel
     /// <summary>
     /// The dialog presenter for the app.
     /// </summary>
-    IDialogPresenter Dialog { get; }
+    IDialogPresenter Dialogs { get; }
 
     /// <summary>
     /// The content for the app.
@@ -44,17 +44,17 @@ public interface IMainViewModel
 /// <summary>
 /// The main view model.
 /// </summary>
-/// <param name="dialog">Dialog presenter.</param>
+/// <param name="dialogs">Dialog presenter.</param>
 /// <param name="content">Content presenter.</param>
 public partial class MainViewModel(
-    IDialogPresenter dialog,
+    IDialogPresenter dialogs,
     IStackPresenter content
 ) : ViewModel, IMainViewModel
 {
     #region Properties
 
     /// <inheritdoc />
-    public IDialogPresenter Dialog => dialog;
+    public IDialogPresenter Dialogs => dialogs;
 
     /// <inheritdoc />
     public IStackPresenter Content => content;
@@ -68,7 +68,7 @@ public partial class MainViewModel(
     /// </summary>
     protected override void OnCreated()
     {
-        Content.Push<OverviewPageModel>();
+        Content.Push<FirstPageViewModel>();
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public partial class MainViewModel(
     /// </summary>
     public void ShowSettings()
     {
-        Dialog.Show<SettingsViewModel>();
+        Dialogs.Show<SettingsViewModel>();
     }
 
     #endregion

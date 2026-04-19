@@ -32,7 +32,7 @@ public static class IViewAnimationExtensions
     /// <summary>
     /// Animation duration in milleseconds used as the default.
     /// </summary>
-    private const uint DefaultAnimationDuration = 375;
+    private const uint DefaultAnimationDuration = 250;
 
     extension(IViewAnimation)
     {

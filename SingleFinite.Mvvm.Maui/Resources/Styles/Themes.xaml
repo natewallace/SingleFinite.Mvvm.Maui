@@ -7,21 +7,7 @@
     <Style x:Key="DefaultAnimatedContentStyle" TargetType="local:AnimatedContent">
         <Setter Property="ControlTemplate">
             <ControlTemplate>
-                <ContentPresenter
-                    x:Name="ContentPresenter"
-                    Background="{TemplateBinding Background}"
-                    BackgroundColor="{TemplateBinding BackgroundColor}"
-                    VerticalOptions="{TemplateBinding VerticalOptions}"
-                    HorizontalOptions="{TemplateBinding HorizontalOptions}"
-                    HeightRequest="{TemplateBinding HeightRequest}"
-                    WidthRequest="{TemplateBinding WidthRequest}"
-                    MinimumHeightRequest="{TemplateBinding MinimumHeightRequest}"
-                    MaximumHeightRequest="{TemplateBinding MaximumHeightRequest}"
-                    MinimumWidthRequest="{TemplateBinding MinimumWidthRequest}"
-                    MaximumWidthRequest="{TemplateBinding MaximumWidthRequest}"
-                    Margin="{TemplateBinding Margin}"
-                    Padding="{TemplateBinding Padding}"
-                    />
+                <ContentPresenter x:Name="ContentPresenter" />
             </ControlTemplate>
         </Setter>
     </Style>
@@ -31,32 +17,14 @@
         <Setter Property="IsClippedToBounds" Value="True" />
         <Setter Property="ControlTemplate">
             <ControlTemplate>
-                <ContentPresenter
-                    x:Name="ContentPresenter"
-                    Background="{TemplateBinding Background}"
-                    BackgroundColor="{TemplateBinding BackgroundColor}"
-                    VerticalOptions="{TemplateBinding VerticalOptions}"
-                    HorizontalOptions="{TemplateBinding HorizontalOptions}"
-                    HeightRequest="{TemplateBinding HeightRequest}"
-                    WidthRequest="{TemplateBinding WidthRequest}"
-                    MinimumHeightRequest="{TemplateBinding MinimumHeightRequest}"
-                    MaximumHeightRequest="{TemplateBinding MaximumHeightRequest}"
-                    MinimumWidthRequest="{TemplateBinding MinimumWidthRequest}"
-                    MaximumWidthRequest="{TemplateBinding MaximumWidthRequest}"
-                    Margin="{TemplateBinding Margin}"
-                    Padding="{TemplateBinding Padding}"
-                    IsClippedToBounds="{TemplateBinding IsClippedToBounds}"
-                    />
+                <ContentPresenter x:Name="ContentPresenter" />
             </ControlTemplate>
         </Setter>
     </Style>
     <Style TargetType="local:ViewPresenter" BasedOn="{StaticResource DefaultViewPresenterStyle}" />
 
     <Style x:Key="DefaultDialogViewPresenterStyle" TargetType="local:DialogViewPresenter">
-        <Setter Property="ScrimBackgroundColor" Value="#84888480" />
-        <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=Black}" />
-        <Setter Property="DialogShape" Value="RoundRectangle 4" />
-        <Setter Property="DialogShadow" Value="-6 6 12 Black 0.5" />
+        <Setter Property="ScrimBackgroundColor" Value="#00000052" />
         <Setter Property="ControlTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -65,9 +33,7 @@
                             x:Name="Scrim"
                             BackgroundColor="{TemplateBinding ScrimBackgroundColor}"
                             />
-                        <local:AnimatedContent
-                            x:Name="ContentPresenter"
-                            />
+                        <local:AnimatedContent x:Name="AnimatedContent" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -76,23 +42,23 @@
     <Style TargetType="local:DialogViewPresenter" BasedOn="{StaticResource DefaultDialogViewPresenterStyle}" />
 
     <Style x:Key="DefaultDialogStyle" TargetType="local:Dialog">
-        <Setter Property="DialogBackgroundColor" Value="{AppThemeBinding Light=White, Dark=#1f1f1f}" />
-        <Setter Property="DialogShape" Value="RoundRectangle 4" />
-        <Setter Property="DialogShadow" Value="4 4 16 Black 0.5" />
+        <Setter Property="Shape" Value="RoundRectangle 12" />
+        <Setter Property="Shadow" Value="0 5 10 Black 0.26" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="ControlTemplate">
             <Setter.Value>
                 <ControlTemplate>
-                    <Grid>
-                        <Border
-                            x:Name="DialogBorder"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Center"
-                            BackgroundColor="{TemplateBinding DialogBackgroundColor}"
-                            StrokeShape="{TemplateBinding DialogShape}"
-                            Shadow="{TemplateBinding DialogShadow}">
-                            <ContentPresenter Content="{TemplateBinding DialogContent}" />
-                        </Border>
-                    </Grid>
+                    <Border
+                        x:Name="DialogBorder"
+                        StrokeShape="{TemplateBinding Shape}"
+                        Shadow="{TemplateBinding Shadow}"
+                        >
+                        <ContentPresenter
+                            x:Name="DialogContent"
+                            Content="{TemplateBinding Content}"
+                            />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Maui.Markup;
 using SingleFinite.Essentials;
 
-namespace Example.App.Views.Pages;
+namespace Example.App.Views;
 
 /// <summary>
-/// The common template for page views.
+/// The common base class for page views.
 /// </summary>
-public class TemplatePageView : ContentView
+public partial class BasePageView : ContentView
 {
     #region Fields
 
@@ -37,49 +37,49 @@ public class TemplatePageView : ContentView
     /// <summary>
     /// Constructor.
     /// </summary>
-    public TemplatePageView()
+    public BasePageView()
     {
-        base.Content = new Border
-        {
-            Stroke = SolidColorBrush.DarkGray,
-            Content = new Grid
-            {
-                RowDefinitions =
-                {
-                    new RowDefinition { Height = GridLength.Auto },
-                    new RowDefinition { Height = GridLength.Star },
-                    new RowDefinition { Height = GridLength.Auto }
-                },
-                Children =
-                {
-                    _titleLabel.Row(0),
-                    _contentPresenter.Row(1),
-                    new Grid
-                    {
-                        Padding = 24,
-                        ColumnDefinitions =
-                        {
-                            new ColumnDefinition { Width = GridLength.Auto },
-                            new ColumnDefinition { Width = GridLength.Star },
-                            new ColumnDefinition { Width = GridLength.Auto }
-                        },
-                        Children =
-                        {
-                            _backButton
-                                .Row(0)
-                                .IsVisible(false)
-                                .Text("Back")
-                                .Also(it => it.Clicked += (_, _) => OnBack?.Invoke()),
+        _titleLabel
+            .Padding(24)
+            .Font(bold: true);
 
-                            _nextButton
-                                .Row(0)
-                                .Column(2)
-                                .IsVisible(false)
-                                .Text("Next")
-                                .Also(it => it.Clicked += (_, _) => OnNext?.Invoke())
-                        }
-                    }.Row(2)
-                }
+        base.Content = new Grid
+        {
+            RowDefinitions =
+            {
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Star },
+                new RowDefinition { Height = GridLength.Auto }
+            },
+            Children =
+            {
+                _titleLabel.Row(0),
+                _contentPresenter.Row(1),
+                new Grid
+                {
+                    Padding = 24,
+                    ColumnDefinitions =
+                    {
+                        new ColumnDefinition { Width = GridLength.Auto },
+                        new ColumnDefinition { Width = GridLength.Star },
+                        new ColumnDefinition { Width = GridLength.Auto }
+                    },
+                    Children =
+                    {
+                        _backButton
+                            .Row(0)
+                            .IsVisible(false)
+                            .Text("Back")
+                            .Also(it => it.Clicked += (_, _) => OnBack?.Invoke()),
+
+                        _nextButton
+                            .Row(0)
+                            .Column(2)
+                            .IsVisible(false)
+                            .Text("Next")
+                            .Also(it => it.Clicked += (_, _) => OnNext?.Invoke())
+                    }
+                }.Row(2)
             }
         };
     }

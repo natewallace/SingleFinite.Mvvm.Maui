@@ -7,9 +7,17 @@ using Example.App.Services;
 
 namespace Example.App;
 
+/// <summary>
+/// Extensions for the <see cref="AppHostBuilder"/> class.
+/// </summary>
 public static class AppHostBuilderExtensions
 {
-    public static AppHostBuilder AddExampleViews(
+    /// <summary>
+    /// Register types defined in this assembly.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    public static AppHostBuilder AddExampleApp(
         this AppHostBuilder builder
     ) => builder
         .AddServices(services =>

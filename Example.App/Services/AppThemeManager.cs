@@ -24,10 +24,14 @@ using SingleFinite.Essentials;
 
 namespace Example.App.Services;
 
+/// <summary>
+/// Implementation of <see cref="IAppThemeManager"/>.
+/// </summary>
 internal class AppThemeManager : IAppThemeManager
 {
     #region Properties
 
+    /// <inheritdoc/>
     public Models.AppTheme Current
     {
         get => Application.Current?.UserAppTheme.ToModelsAppTheme() ?? Models.AppTheme.System;
@@ -48,8 +52,9 @@ internal class AppThemeManager : IAppThemeManager
 
     #region Events
 
-    private readonly EventObservableSource<Models.AppTheme> _currentChangedSource = new();
+    /// <inheritdoc/>
     public IEventObservable<Models.AppTheme> CurrentChanged => _currentChangedSource.Observable;
+    private readonly EventObservableSource<Models.AppTheme> _currentChangedSource = new();
 
     #endregion
 }

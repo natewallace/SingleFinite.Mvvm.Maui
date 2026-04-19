@@ -21,24 +21,24 @@
 
 using SingleFinite.Mvvm;
 
-namespace Example.Models.Pages;
+namespace Example.Models.ViewModels;
 
 /// <summary>
-/// The second page of the example.
+/// The first page of the example.
 /// </summary>
 /// <param name="mainViewModel">The main view model.</param>
-public class SecondPageViewModel(
+public class FirstPageViewModel(
     IMainViewModel mainViewModel
 ) : ViewModel
 {
     #region Methods
 
     /// <summary>
-    /// Navigate to the previous page.
+    /// Navigate to the second page.
     /// </summary>
-    public void Back()
+    public void Next()
     {
-        mainViewModel.Content.Pop();
+        mainViewModel.Content.Push<SecondPageViewModel>();
     }
 
     #endregion

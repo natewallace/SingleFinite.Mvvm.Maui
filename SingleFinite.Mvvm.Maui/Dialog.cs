@@ -34,21 +34,10 @@ internal partial class Dialog : TemplatedView
     /// <summary>
     /// The dialog content.
     /// </summary>
-    public static readonly BindableProperty DialogContentProperty =
+    public static readonly BindableProperty ContentProperty =
         BindableProperty.Create(
-            propertyName: nameof(DialogContent),
+            propertyName: nameof(Content),
             returnType: typeof(object),
-            declaringType: typeof(Dialog),
-            defaultValue: null
-        );
-
-    /// <summary>
-    /// The background color for the dialog.
-    /// </summary>
-    public static readonly BindableProperty DialogBackgroundColorProperty =
-        BindableProperty.Create(
-            propertyName: nameof(DialogBackgroundColor),
-            returnType: typeof(Color),
             declaringType: typeof(Dialog),
             defaultValue: null
         );
@@ -56,23 +45,12 @@ internal partial class Dialog : TemplatedView
     /// <summary>
     /// The dialog shape.
     /// </summary>
-    public static readonly BindableProperty DialogShapeProperty =
+    public static readonly BindableProperty ShapeProperty =
         BindableProperty.Create(
-            propertyName: nameof(DialogShape),
+            propertyName: nameof(Shape),
             returnType: typeof(IShape),
             declaringType: typeof(Dialog),
             defaultValue: new Rectangle()
-        );
-
-    /// <summary>
-    /// The dialog shadow.
-    /// </summary>
-    public static readonly BindableProperty DialogShadowProperty =
-        BindableProperty.Create(
-            propertyName: nameof(DialogShadow),
-            returnType: typeof(Shadow),
-            declaringType: typeof(Dialog),
-            defaultValue: null
         );
 
     #endregion
@@ -86,9 +64,9 @@ internal partial class Dialog : TemplatedView
     {
         // Dialogs are designed for one time use.
         //
-        this.Unloaded += (_, _) =>
+        Unloaded += (_, _) =>
         {
-            DialogContent = null;
+            Content = null;
         };
     }
 
@@ -99,39 +77,20 @@ internal partial class Dialog : TemplatedView
     /// <summary>
     /// The dialog content.
     /// </summary>
-    public object? DialogContent
+    public object? Content
     {
-        get => GetValue(DialogContentProperty);
-        set => SetValue(DialogContentProperty, value);
-    }
-
-    /// <summary>
-    /// The background color for the dialog.
-    /// </summary>
-    public Color DialogBackgroundColor
-    {
-        get => (Color)GetValue(DialogBackgroundColorProperty);
-        set => SetValue(DialogBackgroundColorProperty, value);
+        get => GetValue(ContentProperty);
+        set => SetValue(ContentProperty, value);
     }
 
     /// <summary>
     /// The dialog shape.
     /// </summary>
     [TypeConverter(typeof(StrokeShapeTypeConverter))]
-    public IShape? DialogShape
+    public IShape? Shape
     {
-        get => (IShape)GetValue(DialogShapeProperty);
-        set => SetValue(DialogShapeProperty, value);
-    }
-
-    /// <summary>
-    /// The dialog shadow.
-    /// </summary>
-    [TypeConverter(typeof(ShadowTypeConverter))]
-    public Shadow DialogShadow
-    {
-        get => (Shadow)GetValue(DialogShadowProperty);
-        set => SetValue(DialogShadowProperty, value);
+        get => (IShape)GetValue(ShapeProperty);
+        set => SetValue(ShapeProperty, value);
     }
 
     #endregion

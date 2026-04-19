@@ -19,14 +19,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Example.Models.ViewModels;
 using SingleFinite.Mvvm;
 
-namespace Example.Models;
+namespace Example.App.Views;
 
-public static class AppHostBuilderExtensions
+/// <summary>
+/// The view for the first page.
+/// </summary>
+public partial class FirstPageView : ContentView, IView<FirstPageViewModel>
 {
-    extension(AppHostBuilder builder)
+    #region Constructors
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="viewModel">The view model for this view.</param>
+    public FirstPageView(FirstPageViewModel viewModel)
     {
-        public AppHostBuilder AddExampleModels() => builder;
+        ViewModel = viewModel;
+
+        Content = new BasePageView
+        {
+            Title = "First Page",
+            Content = new Label
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                Text = "This is the first page."
+            },
+            OnNext = ViewModel.Next
+        };
     }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// The view model for this view.
+    /// </summary>
+    public FirstPageViewModel ViewModel { get; }
+
+    #endregion
 }

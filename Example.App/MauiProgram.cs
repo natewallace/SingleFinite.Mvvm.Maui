@@ -3,8 +3,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Example.App;
 
+/// <summary>
+/// The entry point for the application.
+/// </summary>
 public static class MauiProgram
 {
+    #region Methods
+
+    /// <summary>
+    /// Create the Maui app.
+    /// </summary>
+    /// <returns>The created Maui app.</returns>
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
@@ -24,4 +33,6 @@ public static class MauiProgram
 
         return builder.Build();
     }
+
+    #endregion
 }

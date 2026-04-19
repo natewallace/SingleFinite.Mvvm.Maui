@@ -27,6 +27,9 @@ using SingleFinite.Mvvm.Services;
 
 namespace Example.App;
 
+/// <summary>
+/// The application class which holds the app host.
+/// </summary>
 public partial class App : Application
 {
     #region Fields
@@ -38,18 +41,34 @@ public partial class App : Application
 
     #endregion
 
+    #region Constructors
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     public App()
     {
         InitializeComponent();
     }
 
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Create the app host and its window.
+    /// </summary>
+    /// <param name="activationState">Not used.</param>
+    /// <returns>The window for the app host.</returns>
     protected override Window CreateWindow(IActivationState? activationState)
     {
         _appHost ??= new AppHostBuilder()
             .AddMaui<IMainViewModel, MainViewModel>()
-            .AddExampleViews()
+            .AddExampleApp()
             .BuildAndStart();
 
         return _appHost.ServiceProvider.GetRequiredService<IMauiApp>().Window;
     }
+
+    #endregion
 }
