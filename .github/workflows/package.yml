@@ -18,8 +18,9 @@ jobs:
       - name: Install .NET MAUI
         shell: bash
         run: dotnet workload install maui
-      - run: dotnet build --configuration Release SingleFinite.Mvvm.Maui
+      - name: Build the project
+        run: dotnet build --configuration Release SingleFinite.Mvvm.Maui
       - name: Create the package
-        run: dotnet pack --configuration Release SingleFinite.Mvvm.Maui
+        run: dotnet pack --configuration Release --output ./dist SingleFinite.Mvvm.Maui
       - name: Publish the package
-        run: dotnet nuget push SingleFinite.Mvvm.Maui/SingleFinite.Mvvm.Maui/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_TOKEN}}
+        run: dotnet nuget push ./dist/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_TOKEN}}
