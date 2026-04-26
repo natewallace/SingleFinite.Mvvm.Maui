@@ -22,4 +22,4 @@ jobs:
       - name: Create the package
         run: dotnet pack --configuration Release SingleFinite.Mvvm.Maui
       - name: Publish the package
-        run: dotnet nuget push SingleFinite.Mvvm.Maui/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_TOKEN}}
+        run: dotnet nuget push SingleFinite.Mvvm.Maui/SingleFinite.Mvvm.Maui/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_TOKEN}}
